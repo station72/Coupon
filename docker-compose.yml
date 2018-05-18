@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  coupon:
+    image: coupon
+    build:
+      context: ./Coupon
+      dockerfile: Dockerfile
