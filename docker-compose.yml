@@ -6,3 +6,9 @@ services:
     build:
       context: ./Coupon
       dockerfile: Dockerfile
+
+  coupon.frontend:
+    image: coupon.frontend
+    build:
+      context: ./Coupon.FrontEnd
+      dockerfile: Dockerfile
