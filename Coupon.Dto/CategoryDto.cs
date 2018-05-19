@@ -1,6 +1,6 @@
-﻿namespace Coupon.Data.Model
+﻿namespace Coupon.Dto
 {
-    public class Discounts
+    public class CategoryDto
     {
         public int Id { get; set; }
 

@@ -9,6 +9,7 @@ namespace Coupon.Data
         {
         }
 
-        public DbSet<Discounts> Discounts { get; set; }
+        public DbSet<Categories> Categories { get; set; }
+        public DbSet<Products> Products { get; set; }
     }
 }
