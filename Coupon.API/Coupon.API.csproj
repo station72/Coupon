@@ -14,9 +14,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Coupon.DAL\Coupon.DAL.csproj" />
+    <ProjectReference Include="..\Coupon.Data.Cache\Coupon.Data.Cache.csproj" />
+    <ProjectReference Include="..\Coupon.Data\Coupon.Data.csproj" />
+    <ProjectReference Include="..\Coupon.Services\Coupon.Services.csproj" />
     <ProjectReference Include="..\Coupon.Web.Utils\Coupon.Web.Utils.csproj" />
-    <ProjectReference Include="..\Coupon\Coupon.Forms\Coupon.Forms.csproj" />
-    <ProjectReference Include="..\Coupon\Coupon.Services\Coupon.Services.csproj" />
   </ItemGroup>
 
 </Project>

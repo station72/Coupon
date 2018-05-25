@@ -8,4 +8,8 @@
     <PackageReference Include="StackExchange.Redis" Version="1.2.6" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Coupon.Data\Coupon.Data.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -41,7 +41,6 @@ namespace Coupon.API
             services.AddAutoMapper(typeof(AutomapperConfiguration).GetTypeInfo().Assembly);
 
             //cache
-            services.AddScoped<IRedisConnectionFactory, RedisConnectionFactory>();
             services.AddScoped<IProductsCache, ProductsCache>();
 
             //repositories

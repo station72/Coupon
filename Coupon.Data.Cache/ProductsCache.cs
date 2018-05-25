@@ -17,7 +17,7 @@ namespace Coupon.Data.Cache
         public async Task<Products> GetProduct(int id)
         {
             var cacheResult = await _distributedCache.GetStringAsync("product.{id}");
-
+            throw new System.NotImplementedException();
         }
     }
 }
