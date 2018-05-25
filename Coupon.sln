@@ -7,7 +7,7 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Data", "Coupon.Data\Coupon.Data.csproj", "{BCF9605E-238B-4975-BD07-8EBB109FA0C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.API", "..\Coupon.API\Coupon.API.csproj", "{FB8C7189-75C4-464B-A085-B6A64F2C1BE2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.API", "Coupon.API\Coupon.API.csproj", "{FB8C7189-75C4-464B-A085-B6A64F2C1BE2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Services", "Coupon.Services\Coupon.Services.csproj", "{F8671BFC-9AD7-4814-94B8-083836D10B30}"
 EndProject
@@ -17,7 +17,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Common", "Coupon.Com
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Forms", "Coupon.Forms\Coupon.Forms.csproj", "{976316B5-E247-449D-8FF6-8E22472E9AF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coupon.Web.Utils", "..\Coupon.Web.Utils\Coupon.Web.Utils.csproj", "{5106E500-376D-4580-9DB9-E3AE7AB346D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Web.Utils", "Coupon.Web.Utils\Coupon.Web.Utils.csproj", "{5106E500-376D-4580-9DB9-E3AE7AB346D8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.DAL", "Coupon.DAL\Coupon.DAL.csproj", "{944AF466-A598-4417-B62F-57576E93D245}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coupon.Data.Cache", "Coupon.Data.Cache\Coupon.Data.Cache.csproj", "{01D4AF40-0B9D-4E92-948D-A24C4B0E4800}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +61,14 @@ Global
 		{5106E500-376D-4580-9DB9-E3AE7AB346D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5106E500-376D-4580-9DB9-E3AE7AB346D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5106E500-376D-4580-9DB9-E3AE7AB346D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{944AF466-A598-4417-B62F-57576E93D245}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{944AF466-A598-4417-B62F-57576E93D245}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{944AF466-A598-4417-B62F-57576E93D245}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{944AF466-A598-4417-B62F-57576E93D245}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01D4AF40-0B9D-4E92-948D-A24C4B0E4800}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01D4AF40-0B9D-4E92-948D-A24C4B0E4800}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01D4AF40-0B9D-4E92-948D-A24C4B0E4800}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01D4AF40-0B9D-4E92-948D-A24C4B0E4800}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

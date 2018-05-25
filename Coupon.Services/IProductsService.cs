@@ -11,5 +11,7 @@ namespace Coupon.Services
         Task<ProductDto> GetAsync(int id);
 
         Task<ProductDto> UpdateAsync(int id, ProductUpdateForm form);
+
+        Task DeleteAsync(int id);
     }
 }

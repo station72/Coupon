@@ -11,9 +11,10 @@ using System;
 namespace Coupon.Data.Migrations
 {
     [DbContext(typeof(CouponDbContext))]
-    partial class CouponDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180520094559_AddIsdeletedToProducts")]
+    partial class AddIsdeletedToProducts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

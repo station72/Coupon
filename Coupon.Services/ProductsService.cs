@@ -1,24 +1,23 @@
-﻿using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using Coupon.Common;
-using Coupon.Data;
+using Coupon.DAL;
 using Coupon.Data.Model;
 using Coupon.Dto;
 using Coupon.Forms;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
 namespace Coupon.Services
 {
     public class ProductsService : IProductsService
     {
-        private readonly CouponDbContext _couponDbContext;
+        private readonly IProductsRepository _productsRepository;
         private readonly IMapper _mapper;
 
         public ProductsService(
-            CouponDbContext couponDbContext,
+            IProductsRepository productsRepository,
             IMapper mapper)
         {
-            _couponDbContext = couponDbContext;
+            _productsRepository = productsRepository;
             _mapper = mapper;
         }
 
@@ -29,18 +28,30 @@ namespace Coupon.Services
                 Title = form.Title
             };
 
-            var result =  _couponDbContext.Products.Add(productForCreation);
-            await _couponDbContext.SaveChangesAsync();
+            var result = _productsRepository.Add(productForCreation);
+            await _productsRepository.Save();
 
-            var mapperdProduct = _mapper.Map<ProductDto>(result.Entity);
+            var mapperdProduct = _mapper.Map<ProductDto>(result);
             return mapperdProduct;
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var product = await _productsRepository.Get(id);
+
+            if (product == null)
+            {
+                throw new NotFoundException();
+            }
+
+            _productsRepository.Delete(product);
+
+            await _productsRepository.Save();
         }
 
         public async Task<ProductDto> GetAsync(int id)
         {
-            throw new System.NotImplementedException("Hello!");
-            var product = await _couponDbContext.Products
-                .FirstOrDefaultAsync(u=>u.Id == id);
+            var product = await _productsRepository.Get(id);
 
             if (product == null)
                 throw new NotFoundException();
@@ -50,14 +61,13 @@ namespace Coupon.Services
 
         public async Task<ProductDto> UpdateAsync(int id, ProductUpdateForm form)
         {
-            var product = await _couponDbContext.Products
-                .FirstOrDefaultAsync(u => u.Id == id);
+            var product = await _productsRepository.Get(id);
 
             if (product == null)
                 throw new NotFoundException();
 
             product.Title = form.Title;
-            await _couponDbContext.SaveChangesAsync();
+            await _productsRepository.Save();
 
             return _mapper.Map<ProductDto>(product);
         }
