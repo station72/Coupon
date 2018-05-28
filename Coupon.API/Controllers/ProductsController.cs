@@ -1,5 +1,6 @@
 ﻿using Coupon.Common;
 using Coupon.Forms;
+using Coupon.Forms.Common;
 using Coupon.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -29,6 +30,13 @@ namespace Coupon.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProduct(int id)
         {
+            if (id <= 0)
+            {
+                //TODO: test it
+                ModelState.AddModelError(nameof(id), "Id can not be less than 1.");
+                return new BadRequestObjectResult(ModelState);
+            }
+
             try
             {
                 var result = await _products.GetAsync(id);
@@ -43,6 +51,14 @@ namespace Coupon.API.Controllers
                 ModelState.AddModelError("", ex.Message);
                 return new BadRequestObjectResult(ModelState);
             }
+        }
+
+        [Route("api/products")]
+        [HttpGet]
+        public async Task<IActionResult> GetProducts(PagingForm pagingForm)
+        {
+            var result = await _products.GetListAsync(pagingForm);
+            return Ok(result);
         }
 
         [Route("api/products/{id}")]

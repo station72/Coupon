@@ -1,14 +1,17 @@
 ﻿using Coupon.Data;
 using Coupon.Data.Cache;
 using Coupon.Data.Model;
+using Coupon.Forms.Common;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Coupon.DAL
 {
     public class ProductsRepository : IProductsRepository
     {
-        private readonly CouponDbContext _couponDbContext;
+        private readonly CouponDbContext _db;
         private readonly IProductsCache _productCache;
 
         public ProductsRepository(
@@ -17,13 +20,13 @@ namespace Coupon.DAL
             )
         {
             _productCache = productCache;
-            _couponDbContext = couponDbContext;
+            _db = couponDbContext;
         }
 
         public async Task<Products> Add(Products product)
         {
-            var added = _couponDbContext.Products.Add(product);
-            await _couponDbContext.SaveChangesAsync();
+            var added = _db.Products.Add(product);
+            await _db.SaveChangesAsync();
 
             await _productCache.AddOrUpdateAsync(product);
 
@@ -43,15 +46,27 @@ namespace Coupon.DAL
                 return cacheResult.Value;
             }
 
-            var product = await _couponDbContext.Products
+            var product = await _db.Products
                 .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
 
             return product;
         }
 
+        public async Task<IEnumerable<Products>> GetListAsync(PagingForm pagingForm)
+        {
+            var result = await _db.Products
+                .AsNoTracking()
+                .Where(u => !u.IsDeleted)
+                .Skip(pagingForm.Offset)
+                .Take(pagingForm.Limit)
+                .ToArrayAsync();
+
+            return result;
+        }
+
         public Task<int> Save()
         {
-            return _couponDbContext.SaveChangesAsync();
+            return _db.SaveChangesAsync();
         }
     }
 }

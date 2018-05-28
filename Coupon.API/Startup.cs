@@ -36,12 +36,6 @@ namespace Coupon.API
                 var resolver = options.SerializerSettings.ContractResolver as DefaultContractResolver;
             });
 
-            //services.AddDistributedRedisCache(options =>
-            //{
-            //    options.InstanceName = Configuration.GetValue<string>("redis:name");
-            //    options.Configuration = Configuration.GetValue<string>("redis:host");
-            //});
-
             services.AddAutoMapper(typeof(AutomapperConfiguration).GetTypeInfo().Assembly);
 
             services.AddServices();

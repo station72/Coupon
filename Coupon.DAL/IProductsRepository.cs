@@ -1,4 +1,6 @@
 ﻿using Coupon.Data.Model;
+using Coupon.Forms.Common;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Coupon.DAL
@@ -12,5 +14,7 @@ namespace Coupon.DAL
         Task<Products> Get(int id);
 
         Task<int> Save();
+
+        Task<IEnumerable<Products>> GetListAsync(PagingForm pagingForm);
     }
 }

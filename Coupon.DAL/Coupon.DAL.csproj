@@ -7,6 +7,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Coupon.Data.Cache\Coupon.Data.Cache.csproj" />
     <ProjectReference Include="..\Coupon.Data\Coupon.Data.csproj" />
+    <ProjectReference Include="..\Coupon.Dto\Coupon.Dto.csproj" />
+    <ProjectReference Include="..\Coupon.Forms\Coupon.Forms.csproj" />
   </ItemGroup>
 
 </Project>

@@ -4,6 +4,9 @@ using Coupon.DAL;
 using Coupon.Data.Model;
 using Coupon.Dto;
 using Coupon.Forms;
+using Coupon.Forms.Common;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Coupon.Services
@@ -53,6 +56,12 @@ namespace Coupon.Services
                 throw new NotFoundException();
 
             return _mapper.Map<ProductDto>(product);
+        }
+
+        public async Task<IEnumerable<ProductDto>> GetListAsync(PagingForm pagingForm)
+        {
+            var products = await _productsRepository.GetListAsync(pagingForm);
+            return products.Select(_mapper.Map<ProductDto>);
         }
 
         public async Task<ProductDto> UpdateAsync(int id, ProductUpdateForm form)
