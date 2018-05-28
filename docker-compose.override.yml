@@ -1,18 +1,13 @@
 version: '3.4'
 
 services:
-  coupon:
+  coupon.api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
       - "80"
-  coupon.frontend:
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "80"
+
 networks:
   default:
     external:
       name: nat
-

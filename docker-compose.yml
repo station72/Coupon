@@ -1,14 +1,8 @@
 version: '3.4'
 
 services:
-  coupon:
-    image: coupon
+  coupon.api:
+    image: ${DOCKER_REGISTRY}couponapi
     build:
-      context: ./Coupon
-      dockerfile: Dockerfile
-
-  coupon.frontend:
-    image: coupon.frontend
-    build:
-      context: ./Coupon.FrontEnd
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Coupon.API\Dockerfile

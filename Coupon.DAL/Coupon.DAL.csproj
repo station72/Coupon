@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Coupon.Data.Cache\Coupon.Data.Cache.csproj" />
     <ProjectReference Include="..\Coupon.Data\Coupon.Data.csproj" />
   </ItemGroup>
 

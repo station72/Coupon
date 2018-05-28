@@ -28,8 +28,8 @@ namespace Coupon.Services
                 Title = form.Title
             };
 
-            var result = _productsRepository.Add(productForCreation);
-            await _productsRepository.Save();
+            var result = await _productsRepository.Add(productForCreation);
+            //await _productsRepository.Save();
 
             var mapperdProduct = _mapper.Map<ProductDto>(result);
             return mapperdProduct;
@@ -38,14 +38,10 @@ namespace Coupon.Services
         public async Task DeleteAsync(int id)
         {
             var product = await _productsRepository.Get(id);
-
             if (product == null)
-            {
                 throw new NotFoundException();
-            }
 
             _productsRepository.Delete(product);
-
             await _productsRepository.Save();
         }
 

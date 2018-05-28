@@ -5,7 +5,7 @@ namespace Coupon.DAL
 {
     public interface IProductsRepository
     {
-        Products Add(Products product);
+        Task<Products> Add(Products product);
 
         void Delete(Products product);
 

@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Coupon.DAL;
+using Coupon.Common.Options;
 using Coupon.Data;
-using Coupon.Data.Cache;
 using Coupon.Services;
+using Coupon.Services.Extensions;
 using Coupon.Web.Utils.Attributes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
+using Newtonsoft.Json.Serialization;
 using System.Reflection;
 
 namespace Coupon.API
@@ -30,26 +30,24 @@ namespace Coupon.API
             {
                 opt.Filters.Add(new ValidationInputAttribute());
                 //opt.Filters.Add(new UnhandledExceptionFilterAttribute());
+            }).AddJsonOptions(options => {
+                var settings = options.SerializerSettings;
+                settings.DateFormatHandling = Newtonsoft.Json.DateFormatHandling.IsoDateFormat;
+                var resolver = options.SerializerSettings.ContractResolver as DefaultContractResolver;
             });
 
-            services.AddDistributedRedisCache(options =>
-            {
-                options.InstanceName = Configuration.GetValue<string>("redis:name");
-                options.Configuration = Configuration.GetValue<string>("redis:host");
-            });
+            //services.AddDistributedRedisCache(options =>
+            //{
+            //    options.InstanceName = Configuration.GetValue<string>("redis:name");
+            //    options.Configuration = Configuration.GetValue<string>("redis:host");
+            //});
 
             services.AddAutoMapper(typeof(AutomapperConfiguration).GetTypeInfo().Assembly);
 
-            //cache
-            services.AddScoped<IProductsCache, ProductsCache>();
+            services.AddServices();
 
-            //repositories
-            services.AddScoped<IProductsRepository, ProductsRepository>();
-
-            //services
-            services.AddScoped<IProductsService, ProductsService>();
-            services.AddScoped<ICategoriesService, CategoriesService>();
-
+            services.Configure<RedisOptions>(Configuration.GetSection(nameof(RedisOptions)));
+            
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<CouponDbContext>(options => options.UseSqlServer(connection));
         }
