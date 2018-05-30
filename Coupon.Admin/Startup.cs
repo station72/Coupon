@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-//using Coupon.Common.Options;
-//using Coupon.Data;
-//using Coupon.Services;
-//using Coupon.Web.Utils.Attributes;
+using Coupon.Common.Options;
+using Coupon.Data;
+using Coupon.Services;
+using Coupon.Web.Utils.Attributes;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -26,9 +26,11 @@ namespace Coupon.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddLogging();
+
             services.AddMvc(opt=> 
             {
-                //opt.Filters.Add(new ValidationInputAttribute());
+                opt.Filters.Add(new ValidationInputAttribute());
             })
             .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -37,14 +39,14 @@ namespace Coupon.Admin
                 c.RootPath = "ClientApp/dist";
             });
 
-            //services.AddAutoMapper(typeof(AutomapperConfiguration).GetTypeInfo().Assembly);
+            services.AddAutoMapper(typeof(AutomapperConfiguration).GetTypeInfo().Assembly);
 
-            //services.Configure<RedisOptions>(Configuration.GetSection(nameof(RedisOptions)));
+            services.Configure<RedisOptions>(Configuration.GetSection(nameof(RedisOptions)));
 
-            //var connection = Configuration.GetConnectionString("DefaultConnection");
-            //services.AddDbContext<CouponDbContext>(options => options.UseSqlServer(connection));
+            var connection = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<CouponDbContext>(options => options.UseSqlServer(connection));
 
-            //services.AddScoped<IProvidersService, ProvidersService>();
+            services.AddScoped<IProvidersService, ProvidersService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
