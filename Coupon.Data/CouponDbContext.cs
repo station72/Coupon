@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Data
 {
-    public class CouponDbContext// : DbContext
+    public class CouponDbContext : DbContext
     {
-        public CouponDbContext(DbContextOptions options)// : base(options)
+        public CouponDbContext(DbContextOptions options) : base(options)
         {
         }
 
