@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+@model Coupon.FronEnd.ViewModels.ProductsListViewModel
+
+<h2>Index</h2>
+
+There will be products
+
+@foreach (var product in Model.Products)
+{
+<br />
+   @:Id = @product.Id
+   @:Desc = @product.Desc
+}

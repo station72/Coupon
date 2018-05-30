@@ -1,0 +1,20 @@
+SuperAdmin
+	- Add providers and admins
+
+Admin (add later)
+
+Provider fields
+	- Title
+	- Employees
+
+Provider employee fields
+	- Name
+	- Phone
+	- Email
+	- Role: SuperVisor (one per provider), Employee
+	- Provider
+
+Provider admin can:
+	- CRUD employee
+	- block employee
+	- CRUD product

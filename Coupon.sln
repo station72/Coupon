@@ -23,9 +23,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Data.Cache", "Coupon
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{37747DE4-1717-4E44-844F-26BF397F5AB0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.FronEnd", "..\Coupon.FronEnd\Coupon.FronEnd.csproj", "{B6A45AF9-C0C2-4EDF-B3C1-4B523FA00202}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.FronEnd", "Coupon.FronEnd\Coupon.FronEnd.csproj", "{B6A45AF9-C0C2-4EDF-B3C1-4B523FA00202}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coupon.Admin", "..\Coupon.Admin\Coupon.Admin.csproj", "{BB32FF20-2E70-4E41-A6E9-3BD999855E90}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Admin", "Coupon.Admin\Coupon.Admin.csproj", "{24B9884B-8505-4E1A-B620-EE71A857C37A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2D1C9700-D20E-4F53-8A8C-242D1765105A}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -77,10 +82,10 @@ Global
 		{B6A45AF9-C0C2-4EDF-B3C1-4B523FA00202}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B6A45AF9-C0C2-4EDF-B3C1-4B523FA00202}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B6A45AF9-C0C2-4EDF-B3C1-4B523FA00202}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BB32FF20-2E70-4E41-A6E9-3BD999855E90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB32FF20-2E70-4E41-A6E9-3BD999855E90}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB32FF20-2E70-4E41-A6E9-3BD999855E90}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB32FF20-2E70-4E41-A6E9-3BD999855E90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24B9884B-8505-4E1A-B620-EE71A857C37A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24B9884B-8505-4E1A-B620-EE71A857C37A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24B9884B-8505-4E1A-B620-EE71A857C37A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24B9884B-8505-4E1A-B620-EE71A857C37A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
