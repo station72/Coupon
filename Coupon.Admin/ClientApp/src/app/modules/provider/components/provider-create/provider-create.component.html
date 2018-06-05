@@ -1,0 +1,34 @@
+<h1>Создание поставщика</h1>
+<form [formGroup]="f" (ngSubmit)="onSubmit()" novalidate>
+    <div class="form-group" [ngClass]="{ 
+        'has-error': title.invalid, 
+        'has-success': null
+    }">
+        <label for="title">Название</label>
+        <input id="title" type="text" formControlName="title" class="form-control" 
+            [ngClass]="{ 
+                'is-invalid': title.invalid && (submitted || title.touched),
+                'is-valid': title.valid && (submitted || title.touched)
+            }"
+        />
+        <div *ngIf="(submitted || title.touched) && title.invalid" class="alert alert-danger">
+            <div *ngIf="title.errors.required">Название обязательно для ввода</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input id="email" type="email" formControlName="email" class="form-control" 
+            [ngClass]="{ 
+                'is-invalid': email.invalid && (submitted || email.touched),
+                'is-valid': email.valid && (submitted || email.touched)
+            }"
+        />
+        <div *ngIf="(submitted || email.touched) && email.invalid" class="alert alert-danger">
+            <div *ngIf="email.errors.required">Email обязателен для ввода</div>
+            <div *ngIf="email.errors.email">Введите корректный email</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" #submitBtn class="btn btn-primary">Создать</button>
+    </div>
+</form>

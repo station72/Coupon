@@ -8,10 +8,11 @@ import { HttpClient } from '@angular/common/http';
 })
 export class AppComponent {
   title = 'app';
-  public values: string[];
+  // public values: string[];
+  
   constructor(private http: HttpClient) {
-    this.http.get('/api/values').subscribe(result => {
-      this.values = result as string[];
-    }, error => console.error(error));
+    // this.http.get('/api/values').subscribe(result => {
+    //   this.values = result as string[];
+    // }, error => console.error(error));
   }
 }

@@ -3,14 +3,22 @@ using Coupon.Common.Options;
 using Coupon.Data;
 using Coupon.Services;
 using Coupon.Web.Utils.Attributes;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Authorization.Infrastructure;
+using System.Linq;
+using System.Security.Claims;
+using System;
+using Microsoft.AspNetCore.Cors.Infrastructure;
 
 namespace Coupon.Admin
 {
@@ -26,13 +34,35 @@ namespace Coupon.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder.WithOrigins("http://localhost:4200")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .AllowCredentials());
+            });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
+                {
+                    o.Cookie = new CookieBuilder()
+                    {
+                        Name = ".auth",
+                        HttpOnly = true,
+                        Expiration = TimeSpan.FromDays(1)
+                    };
+                    o.LoginPath = new PathString("/api/auth/login");
+                });
+
+            AddAuthorization(services);
+
             services.AddLogging();
 
-            services.AddMvc(opt=> 
+            services.AddMvc(opt =>
             {
                 opt.Filters.Add(new ValidationInputAttribute());
-            })
-            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            });
+            //.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSpaStaticFiles(c =>
             {
@@ -47,19 +77,24 @@ namespace Coupon.Admin
             services.AddDbContext<CouponDbContext>(options => options.UseSqlServer(connection));
 
             services.AddScoped<IProvidersService, ProvidersService>();
+            services.AddScoped<IAdminService, AdminService>();
+
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseAuthentication();
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseHsts();
+                //app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
+            app.UseCors("CorsPolicy");
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
             app.UseMvc(routes =>
@@ -74,11 +109,68 @@ namespace Coupon.Admin
 
                 spa.Options.SourcePath = "ClientApp";
 
-                if (env.IsDevelopment())
-                {
-                    spa.UseAngularCliServer(npmScript: "start");
-                }
+                //spa.UseSpaPrerendering(options =>
+                //{
+                //    options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.bundle.js";
+                //    options.BootModuleBuilder = env.IsDevelopment()
+                //        ? new AngularCliBuilder(npmScript: "build:ssr")
+                //        : null;
+                //    options.ExcludeUrls = new[] { "/sockjs-node" };
+                //});
+
+                //for separate start
+                spa.UseProxyToSpaDevelopmentServer("http://localhost:4200");
+
+                //if (env.IsDevelopment())
+                //{
+                //    spa.UseAngularCliServer(npmScript: "start");
+                //}
             });
         }
+
+        private IServiceCollection AddAuthorization(IServiceCollection services)
+        {
+            var supAdmReq = new AssertionRequirement(context =>
+            {
+                var claim = context.User?.Claims
+                .FirstOrDefault(u => u.Type == ClaimsIdentity.DefaultRoleClaimType);
+
+                if (claim == null)
+                    return false;
+
+                return claim.Value == "SuperAdmin";
+            });
+
+
+            var admOrHighReq = new AssertionRequirement(context =>
+            {
+                var claim = context.User?.Claims
+                .FirstOrDefault(u => u.Type == ClaimsIdentity.DefaultRoleClaimType);
+
+                if (claim == null)
+                    return false;
+
+                return claim.Value == "SuperAdmin" || claim.Value == "Admin";
+            });
+
+            var superAdminPolicy = new AuthorizationPolicy(
+                    new List<IAuthorizationRequirement> { supAdmReq },
+                    new string[] { CookieAuthenticationDefaults.AuthenticationScheme });
+
+
+            services.AddAuthorization(conf =>
+            {
+                conf.AddPolicy("SuperAdmin", superAdminPolicy);
+
+                conf.AddPolicy("AdminOrHigher", new AuthorizationPolicy(
+                    new List<IAuthorizationRequirement> { admOrHighReq },
+                    new string[] { CookieAuthenticationDefaults.AuthenticationScheme }));
+
+                conf.DefaultPolicy = superAdminPolicy;
+            });
+
+            return services;
+        }
     }
+
 }

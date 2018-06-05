@@ -1,5 +1,5 @@
 ﻿using Coupon.Common;
-using Coupon.Forms;
+using Coupon.Forms.Provider;
 using Coupon.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Coupon.Admin.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    //[ApiController]
     public class ProvidersController : Controller
     {
         private readonly IProvidersService _providersService;

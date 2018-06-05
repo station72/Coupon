@@ -1,7 +1,7 @@
 ﻿using Coupon.Common.Constants;
 using System.ComponentModel.DataAnnotations;
 
-namespace Coupon.Forms
+namespace Coupon.Forms.Provider
 {
     public class ProviderCreateForm
     {
