@@ -1,15 +1,18 @@
 import { Component, OnInit } from "@angular/core";
 import { AuthService } from "../../shared/services/auth.service";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-top-menu",
   templateUrl: "top-menu.component.html"
 })
 export class TopMenuComponent implements OnInit {
-  private isLoggingOut = false;
   public isLoggedIn: boolean;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.refreshIsLoggedIn();
@@ -21,10 +24,11 @@ export class TopMenuComponent implements OnInit {
 
   private refreshIsLoggedIn(): void {
     this.isLoggedIn = this.authService.isLoggedIn();
-    console.log("isLoggedIn = " + this.authService.getCurrentUser());
   }
 
   onLogout() {
     this.authService.logout();
+    let res = this.router.navigate(['login']);
+    console.log(res);
   }
 }

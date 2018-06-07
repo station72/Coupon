@@ -1,0 +1,9 @@
+<div class="alert alert-danger" *ngIf="errors.length > 0">
+  <div class="header">
+    <h3> Сервер вернул ошибку: </h3>
+    <button (click)="close()" class="close-btn btn btn-dark btn-sm" value="X">X</button>
+  </div>
+  <div *ngFor="let error of errors">
+      {{error}}
+  </div>
+</div>

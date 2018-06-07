@@ -12,6 +12,9 @@ import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { ProvidersModule } from './modules/provider/providers.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { ErrorsModule } from './modules/errors/errors.module';
+import { NotificationService } from './shared/services/notifications.service';
+import { SharedModule } from './modules/shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -22,16 +25,22 @@ import { AuthModule } from './modules/auth/auth.module';
     NotFoundComponent
   ],
   imports: [
+    // SharedModule,    
+    SharedModule.forRoot(),
     AppRoutingModule,
     AuthModule,
     ProvidersModule,
+    ErrorsModule,
 
     BrowserModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [],
+  exports:[
+  ],
+  providers: [NotificationService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {
+ }

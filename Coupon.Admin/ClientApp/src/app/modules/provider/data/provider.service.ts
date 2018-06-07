@@ -1,46 +1,50 @@
-import { HttpClient, HttpErrorResponse, HttpResponse, HttpResponseBase } from "@angular/common/http";
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpResponse,
+  HttpResponseBase
+} from "@angular/common/http";
+
 import { Observable } from "rxjs";
 import { Injectable, OnInit } from "@angular/core";
+import { map, catchError } from "rxjs/operators";
 
 @Injectable()
-export class ProviderService implements OnInit {
-    private baseUrl = "http://localhost:4200/api"
-    private serviceBaseUrl = "/providers";
-    constructor(private http: HttpClient) {
-        
-    }
+export class ProviderService {
+  private baseUrl = "http://localhost:4200/api";
+  private serviceBaseUrl = "/providers";
+  constructor(private http: HttpClient) {}
 
-    // getList() : Observable<ProviderDto[]> {
-    //     this.http
-    //         .get(this.baseUrl + this.serviceBaseUrl)
-    //         .subscribe((res: any)=>{
-    //             // if(!res.ok){
-    //             //     //throw exception
-    //             // }
-    //             // res as ProviderDto[];
-    //         });
-    // }
+  getProvider(id: string): Observable<ProviderDto> {
+   var result =  this.http
+      .get<ProviderDto>(this.baseUrl + this.serviceBaseUrl + "/" + id, {
+        observe: "response"
+      })
+      .pipe(
+        map(response => {
+          if (!response.ok) {
+            console.log(response);
+            throw new Error("Get provider error!");
+          }
 
-    ngOnInit(): void {
-        this.getList();
-    }
+          return response.body;
+        })
+      );
 
-    getList() {
-        this.http
-            .get(this.baseUrl + this.serviceBaseUrl, {
+      return result;
+  }
 
-            })
-            .subscribe(
-                this.Subscribe,
-                this.Error
-            );
-    }
+  getList() {
+    this.http
+      .get(this.baseUrl + this.serviceBaseUrl, {})
+      .subscribe(this.subscribe, this.onError);
+  }
 
-    Subscribe(response: HttpResponseBase){
-        console.log();
-    }
+  private subscribe(response: HttpResponseBase) {
+    console.log();
+  }
 
-    Error(error: HttpErrorResponse){
-        console.log(error);
-    }
+  private onError(error: HttpErrorResponse) {
+    console.log(error);
+  }
 }
