@@ -27,11 +27,11 @@ import { BrowserModule } from '@angular/platform-browser';
     //   provide: ErrorHandler,
     //   useClass: ErrorsHandler,
     // },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: ServerErrorsInterceptor,
-      multi: true
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: ServerErrorsInterceptor,
+    //   multi: true
+    // },
   ],
   exports:[
     ErrorComponent

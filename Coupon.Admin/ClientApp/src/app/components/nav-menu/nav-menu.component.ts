@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { AuthService } from '../../shared/services/auth.service';
+import { UserRole } from '../../shared/data/user/user-roles';
 
 @Component({
   selector: 'app-nav-menu',
@@ -6,13 +8,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./nav-menu.component.css']
 })
 export class NavMenuComponent {
-  isExpanded = false;
+  constructor(private authService: AuthService){
 
-  collapse() {
-    this.isExpanded = false;
+  }  
+
+  isLoggedIn(): boolean{
+    return this.authService.isLoggedIn();
   }
 
-  toggle() {
-    this.isExpanded = !this.isExpanded;
+  isProvider(): boolean{
+    return this.authService.isLoggedIn() && this.authService.getCurrentUser().role === UserRole.Provider;
+  }
+
+  isAdminOrHight():boolean{
+    return this.authService.isLoggedIn() && this.authService.getCurrentUser().role >= UserRole.Admin;
   }
 }

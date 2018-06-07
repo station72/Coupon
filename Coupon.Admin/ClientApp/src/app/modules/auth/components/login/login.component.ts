@@ -37,11 +37,11 @@ export class LoginComponent implements OnInit {
 
   private formInit() {
     this.username = new FormControl("", 
-      // [Validators.required]
+      [Validators.required]
     );
     this.password = new FormControl("", [
-      // Validators.required,
-      // Validators.minLength(6)
+      Validators.required,
+      Validators.minLength(6)
     ]);
 
     this.loginForm = new FormGroup({
@@ -63,21 +63,11 @@ export class LoginComponent implements OnInit {
         console.log(error);
         const httpError = error as HttpErrorResponse;
         if(httpError.status === 400){
-          this.handleBadInput(httpError);
+          this.badInputService.showHttpError(httpError);
         } 
       }));
 
     return false;
-  }
-
-  handleBadInput(httpError: HttpErrorResponse){
-    let errors : string[] = [];
-    for (const errorName of Object.keys(httpError.error)) {
-      const fieldErrors = httpError.error[errorName] as string[];
-      errors = errors.concat(fieldErrors);
-    }
-
-    this.badInputService.showErrors(errors);
   }
 
   private success(user: UserDto) {

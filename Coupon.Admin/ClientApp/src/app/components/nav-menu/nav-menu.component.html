@@ -1,11 +1,16 @@
+<div *ngIf="isLoggedIn()">
+
+
 <ul class="nav nav-pills flex-column">
   <li class="nav-item">
     <a class="nav-link" [routerLinkActive]='["active"]' [routerLink]='["/"]' [routerLinkActiveOptions]="{exact: true}">Главная</a>
   </li>
 </ul>
 
-<ul class="nav nav-pills flex-column">
-  <li class="nav-item">
+
+<ul  class="nav nav-pills flex-column">
+  *Move admin menu to a separate component
+  <li class="nav-item" *ngIf="isAdminOrHight()">
     <a class="nav-link" [routerLinkActive]='["active"]' [routerLink]='["/providers"]'>Поставщики</a>
   </li>
   <!-- <li class="nav-item">
@@ -18,3 +23,4 @@
       </div>
     </li> -->
 </ul>
+</div>

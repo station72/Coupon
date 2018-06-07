@@ -1,7 +1,7 @@
 import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
-import { ProviderService } from "../../data/provider.service";
+import { ProviderService } from "src/app/modules/provider/services/provider.service";
 
 @Injectable()
 export class ProviderEditResolver implements Resolve<ProviderDto> {

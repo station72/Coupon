@@ -7,6 +7,7 @@ import { ProviderCreateComponent } from "./components/provider-create/provider-c
 import { ProviderListComponent } from "./components/provider-list/provider-list.component";
 import { ProviderEditComponent } from "./components/provider-edit/provider-edit.component";
 import { ProviderRootComponent } from './components/provider-root/provider-root.component';
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
     imports:[
@@ -15,6 +16,7 @@ import { ProviderRootComponent } from './components/provider-root/provider-root.
         ReactiveFormsModule,
         BrowserModule,
         HttpClientModule,
+        SharedModule
     ],
     declarations:[
         ProviderCreateComponent,

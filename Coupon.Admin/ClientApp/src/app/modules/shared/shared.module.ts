@@ -1,8 +1,9 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { SharedRoutingModule } from './shared-routing.module';
 import { BadInputErrorsService } from '../../shared/services/bad-input-errors.service';
-import { BadInputErrorsComponent } from './bad-input-errors/bad-input-errors.component';
 import { BrowserModule } from '@angular/platform-browser';
+import { BadInputErrorsComponent } from './components/bad-input-errors/bad-input-errors.component';
+import { HttpService } from './services/http.service';
 
 @NgModule({
   imports: [
@@ -17,15 +18,17 @@ import { BrowserModule } from '@angular/platform-browser';
   ],
   exports:[
     SharedRoutingModule,
-    BadInputErrorsComponent,
-    // BadInputErrorsService
+    BadInputErrorsComponent
   ]
 })
 export class SharedModule {
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: SharedModule,
-      providers: [ BadInputErrorsService ],
+      providers: [ 
+        BadInputErrorsService,
+        HttpService 
+      ],
     }
  }
 }

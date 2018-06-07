@@ -1,15 +1,17 @@
 import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
-import { HttpClient } from "@angular/common/http";
-import { Observable, fromEvent} from "rxjs";
-import { ProviderService } from "../../data/provider.service";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { Router } from "@angular/router";
+import { BadInputErrorsService } from "../../../../shared/services/bad-input-errors.service";
+import { ProviderService } from "../../services/provider.service";
 
 @Component({
   selector: "providers-create",
   templateUrl: "provider-create.component.html",
   providers: [ProviderService]
 })
-export class ProviderCreateComponent implements OnInit, AfterViewInit {
+export class ProviderCreateComponent implements OnInit {
   public createForm: FormGroup;
   public submitted = false;
   public loading = false;
@@ -21,7 +23,9 @@ export class ProviderCreateComponent implements OnInit, AfterViewInit {
   public submitBtn: ElementRef
 
   constructor(
-    private providerService: ProviderService 
+    private providerService: ProviderService,
+    private route: Router,
+    private badInput: BadInputErrorsService
   ) {}
 
   ngOnInit(): void {
@@ -34,13 +38,6 @@ export class ProviderCreateComponent implements OnInit, AfterViewInit {
       title: this.title,
       email: this.email
     });
-  }
-
-  ngAfterViewInit(): void {
-    // var stream = fromEvent(this.submitBtn.nativeElement, "click");
-    // stream.subscribe(function(){
-    //   console.log('click');
-    // });
   }
 
   get f() : FormGroup {
@@ -57,13 +54,20 @@ export class ProviderCreateComponent implements OnInit, AfterViewInit {
 
     this.loading = true;
 
-    console.log("send to the server!");
     var serialized = JSON.stringify(this.createForm.getRawValue());
-
-    // this.http
-    //   .post("api/providers/create", serialized)
-    //   .subscribe(result => {
-    //       console.log(result);
-    // });
+    this.providerService.create(serialized).subscribe(
+      (provider)=>{
+        this.route.navigate(['providers']);
+      }, 
+      (error)=>{
+        this.loading = false;        
+        let httpError = error as HttpErrorResponse;
+        if(httpError.status === 400){
+          this.badInput.showHttpError(httpError);
+          return;
+        }
+        console.error(httpError);
+      }
+    );
   }
 }

@@ -1,4 +1,5 @@
 ﻿using Coupon.Common;
+using Coupon.Forms.Common;
 using Coupon.Forms.Provider;
 using Coupon.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -19,12 +20,13 @@ namespace Coupon.Admin.Controllers
         }
 
         [HttpPost]
+        [Route("", Name = nameof(CreateProvider))]
         public async Task<IActionResult> CreateProvider([FromBody] ProviderCreateForm createForm)
         {
             try
             {
                 var result = await _providersService.CreateAsync(createForm);
-                return CreatedAtRoute("", result);
+                return CreatedAtRoute(nameof(CreateProvider), result);
             }
             catch (CouponException ex)
             {
@@ -60,6 +62,13 @@ namespace Coupon.Admin.Controllers
                 ModelState.AddModelError(ex.Field, ex.Message);
                 return new BadRequestObjectResult(ModelState);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetList(PagingForm form)
+        {
+            var res = await _providersService.ListAsync(form);
+            return Ok(res);
         }
     }
 }

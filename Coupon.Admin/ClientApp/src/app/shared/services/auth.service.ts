@@ -4,6 +4,7 @@ import { UserDto } from "../data/user/user.dto";
 import { Observable } from "rxjs/internal/Observable";
 import { map } from "rxjs/operators";
 import { Subject } from "rxjs";
+import { HttpService } from "../../modules/shared/services/http.service";
 
 @Injectable({
   providedIn: "root"
@@ -12,7 +13,7 @@ export class AuthService implements OnInit {
   private readonly keyName = "currentuser";
   public readonly userChanged : Subject<UserDto>; 
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpService) {
     this.userChanged = new Subject<UserDto>();
   }
 
@@ -24,11 +25,7 @@ export class AuthService implements OnInit {
   }
 
   public login(data: string): Observable<UserDto> {
-    var user$ = this.http
-      .post<UserDto>(`http://localhost:43809/api/auth/login`, data, {
-        observe: "response",
-        withCredentials: true
-      })
+    var user$ = this.http.post<UserDto>('/auth/login', data)
       .pipe(
         map(response => {
           if (response.status === 204) {
