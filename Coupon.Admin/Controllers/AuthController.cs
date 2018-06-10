@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Coupon.Forms.Admin;
 using Coupon.Forms.Auth;
 using Coupon.Services;
 using Microsoft.AspNetCore.Authentication;
@@ -11,9 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Coupon.Admin.Controllers
 {
-    //[Produces("application/json")]
-    //[Route("api/auth")]
-    [EnableCors("CorsPolicy")]
+    [EnableCors("CorsPolicy", PolicyName = "CorsPolicy")]
+    [Route("/api/auth")]
     public class AuthController : Controller
     {
         private readonly IAdminService _adminService;
@@ -28,26 +28,18 @@ namespace Coupon.Admin.Controllers
             _authentication = authentication;
         }
 
-        [HttpGet]
-        [Route("/api/auth/test")]
-        [Authorize]
-        public async Task<IActionResult> Test()
+        [HttpGet("test")]
+        [Authorize("SuperAdmin")]
+        public IActionResult Test()
         {
-            return Content("Works!");
+            return Ok("Works");
         }
 
-
-        [HttpPost]
-        [Route("/api/auth/login")]
+        [HttpPost("login")]
         [AllowAnonymous]
         public async Task<IActionResult> Login([FromBody] LoginForm form)
         {
-            if (form.UserName != "sadmin")
-            {
-                return NoContent();
-            }
-
-            var userDto = await _adminService.GetAsync(form);
+            var userDto = await _adminService.GetForLoginAsync(form);
 
             var claims = new Claim[]
             {
@@ -64,24 +56,26 @@ namespace Coupon.Admin.Controllers
                 claimsPrincipal,
                 new AuthenticationProperties
                 {
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1)
+                    ExpiresUtc = DateTime.UtcNow.AddDays(1)
                 });
 
             return Json(userDto);
         }
 
-        [HttpPost]
-        [Route("/api/auth/logout")]
-        [Authorize]
+        [HttpPost("/logout")]
         public async Task<IActionResult> Logout()
         {
             await _authentication.SignOutAsync(HttpContext,
                 CookieAuthenticationDefaults.AuthenticationScheme,
-                new AuthenticationProperties
-                {
-                    ExpiresUtc = DateTimeOffset.UtcNow.AddDays(1)
-                });
+                new AuthenticationProperties());
 
+            return Ok();
+        }
+
+        [HttpPut("{id:int}/password")]
+        public async Task<IActionResult> UpdatePassword(int id, UpdatePasswordForm form)
+        {
+            await _adminService.UpdatePasswordAsync(id, form);
             return Ok();
         }
     }

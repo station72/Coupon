@@ -19,6 +19,7 @@
     <ProjectReference Include="..\Coupon.Data\Coupon.Data.csproj" />
     <ProjectReference Include="..\Coupon.Dto\Coupon.Dto.csproj" />
     <ProjectReference Include="..\Coupon.Forms\Coupon.Forms.csproj" />
+    <ProjectReference Include="..\Coupon.Utils\Coupon.Utils.csproj" />
   </ItemGroup>
 
 </Project>

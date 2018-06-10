@@ -14,5 +14,7 @@ namespace Coupon.Forms.Common
 
         [Range(0, int.MaxValue)]
         public int Offset { get; set; }
+
+        public int Total { get; set; }
     }
 }

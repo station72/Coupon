@@ -1,34 +1,56 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse, HttpHeaders } from '@angular/common/http';
 import { UrlTree } from '@angular/router';
 
 @Injectable()
 export class HttpService {
   private baseUrl = 'http://localhost:43809/api';
+  //private baseUrl = 'http://localhost:5000/api';
+  
   constructor(private http: HttpClient) {
   }
 
   private readonly observe = 'response';
   private readonly withCredentials = true;
+  private readonly headers = {
+    'Content-Type': 'application/json'    
+  };
+
+  private getUrl(uri: string) : string{
+    return this.baseUrl + uri;
+  }
 
   public get<T>(uri): Observable<HttpResponse<T>>{
-    return this.http.get<T>(this.baseUrl + uri, {
+    if(isDevMode()){
+      console.log("GET uri = " + uri);
+    }
+    return this.http.get<T>(this.getUrl(uri), {
       observe: this.observe,
-      withCredentials: this.withCredentials
+      withCredentials: this.withCredentials,
+      headers: this.headers
     })
   }
 
   public post<T>(uri, data: any): Observable<HttpResponse<T>>{
     if(isDevMode()){
-      console.log("uri = " + uri, " data = " + data);
+      console.log("POST uri = " + uri, " data = " + data);
     }
-    return this.http.post<T>(this.baseUrl + uri, data, {
+    return this.http.post<T>(this.getUrl(uri), data, {
       observe: this.observe,
       withCredentials: this.withCredentials,
-      headers:{
-        'Content-Type': 'application/json'
-      }
+      headers: this.headers
+    })
+  }
+
+  public put<T>(uri: string, data: any): Observable<HttpResponse<T>> {
+    if(isDevMode()){
+      console.log("PUT uri = " + uri, " data = " + data);
+    }
+    return this.http.put<T>(this.getUrl(uri), data, {
+      observe: this.observe,
+      withCredentials: this.withCredentials,
+      headers: this.headers
     })
   }
 }

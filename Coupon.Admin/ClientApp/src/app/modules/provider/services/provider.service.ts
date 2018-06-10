@@ -4,10 +4,12 @@ import { Observable } from "rxjs";
 import { Injectable, OnInit } from "@angular/core";
 import { map, catchError } from "rxjs/operators";
 import { HttpService } from "../../shared/services/http.service";
+import { ListResult } from "src/app/shared/data/list-result.dto";
+import { PagingOutDto } from "../../../shared/data/paging/paging-out.dto";
 
 @Injectable()
 export class ProviderService {
-  private serviceBaseUrl = "/providers";
+  private readonly serviceBaseUrl = "/providers";
 
   constructor(private http: HttpService) {}
 
@@ -16,8 +18,6 @@ export class ProviderService {
       .get<ProviderDto>(this.serviceBaseUrl + "/" + id)
       .pipe(
         map(response => {
-          //TODO: will be here after 404?
-          debugger;
           return response.body;
         })
       );
@@ -25,10 +25,9 @@ export class ProviderService {
     return result;
   }
 
-  getList(): Observable<ProviderDto[]> {
-    return this.http.get<ProviderDto[]>(this.serviceBaseUrl).pipe(
+  getList(data: PagingOutDto): Observable<ListResult<ProviderDto>> {
+    return this.http.get<ListResult<ProviderDto>>(this.serviceBaseUrl).pipe(
       map(response => {
-        debugger;
         return response.body;
       })
     );
@@ -40,5 +39,14 @@ export class ProviderService {
         return response.body;
       })
     );
+  }
+
+  update(id: string, data: any): Observable<ProviderDto> {
+    return this.http
+      .put<ProviderDto>(this.serviceBaseUrl + "/" + id, data).pipe(
+        map(response => {
+          return response.body;
+        })
+      );
   }
 }

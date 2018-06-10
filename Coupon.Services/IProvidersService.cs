@@ -14,5 +14,9 @@ namespace Coupon.Services
         Task<IEnumerable<ProviderDto>> ListAsync(PagingForm form);
 
         Task<ProviderDto> GetAsync(Guid id);
+
+        Task<int> TotalAsync(PagingForm form);
+
+        Task<ProviderDto> UpdateAsync(Guid id, ProviderUpdateForm form);
     }
 }

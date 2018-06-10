@@ -1,6 +1,8 @@
-﻿namespace Coupon.Forms.Provider
+﻿using System;
+
+namespace Coupon.Forms.Provider
 {
-    public class ProviderUpdateForm
+    public class ProviderUpdateForm : ProviderCreateForm
     {
     }
 }

@@ -22,7 +22,7 @@ const routes: Routes = [
                 component: ProviderCreateComponent
             },
             {
-                path: 'edit:id',
+                path: 'edit/:id',
                 component: ProviderEditComponent,
                 resolve: {
                     provider: ProviderEditResolver

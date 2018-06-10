@@ -8,6 +8,8 @@ import { ProviderListComponent } from "./components/provider-list/provider-list.
 import { ProviderEditComponent } from "./components/provider-edit/provider-edit.component";
 import { ProviderRootComponent } from './components/provider-root/provider-root.component';
 import { SharedModule } from "../shared/shared.module";
+import { ProviderService } from "./services/provider.service";
+import { ProviderEditResolver } from "./components/provider-edit/provider-edit.resolver";
 
 @NgModule({
     imports:[
@@ -23,6 +25,10 @@ import { SharedModule } from "../shared/shared.module";
         ProviderListComponent,
         ProviderEditComponent,
         ProviderRootComponent
+    ],
+    providers:[
+        ProviderService,
+        ProviderEditResolver
     ]
 })
 export class ProvidersModule{

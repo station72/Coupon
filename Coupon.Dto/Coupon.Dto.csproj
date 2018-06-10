@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Coupon.Common\Coupon.Common.csproj" />
+    <ProjectReference Include="..\Coupon.Forms\Coupon.Forms.csproj" />
   </ItemGroup>
 
 </Project>

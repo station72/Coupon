@@ -7,7 +7,6 @@ using Coupon.Common;
 using Coupon.Data;
 using Coupon.Data.Model;
 using Coupon.Dto;
-using Coupon.Forms;
 using Coupon.Forms.Common;
 using Coupon.Forms.Provider;
 using Microsoft.EntityFrameworkCore;
@@ -76,9 +75,47 @@ namespace Coupon.Services
             return list.Select(_mapper.Map<ProviderDto>);
         }
 
-        public async Task<ProviderDto> UpdateAsync(ProviderUpdateForm form)
+        public async Task<int> TotalAsync(PagingForm form)
         {
-            throw new NotImplementedException();
+            var count = await _db.Providers
+                .Where(u => !u.IsDeleted)
+                .CountAsync();
+
+            return count;
+        }
+
+        public async Task<ProviderDto> UpdateAsync(Guid id, ProviderUpdateForm form)
+        {
+            form.Title = form.Title.Trim();
+            form.Email = form.Email.Trim();
+
+            var provider = await _db.Providers
+                .AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
+
+            if (provider == null)
+                throw new NotFoundException();
+
+            var isEmailOccupied = await _db.Providers
+                .AnyAsync(u => u.Email.Equals(form.Email, StringComparison.InvariantCultureIgnoreCase) 
+                && u.Id != id && !u.IsDeleted);
+
+            if (isEmailOccupied)
+                throw new CouponException("Поставщик с таким email уже есть!!!", nameof(form.Email));
+
+            var isTitleOccupied = await _db.Providers
+                .AnyAsync(u => u.Title.Equals(form.Title, StringComparison.InvariantCultureIgnoreCase) 
+                && u.Id != id && !u.IsDeleted);
+
+            if (isTitleOccupied)
+                throw new CouponException("Поставщик с таким именем уже есть!!!", nameof(form.Title));
+
+            provider.Email = form.Email;
+            provider.Title = form.Title;
+
+            await _db.SaveChangesAsync();
+
+            return _mapper.Map<ProviderDto>(provider);
         }
     }
 }

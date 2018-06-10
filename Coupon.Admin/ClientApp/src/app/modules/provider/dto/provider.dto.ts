@@ -1,4 +1,5 @@
 interface ProviderDto{
     id: string,
-    title: string
+    title: string,
+    email: string
 }

@@ -1,16 +1,16 @@
-﻿using Coupon.Common;
+﻿using Coupon.Dto;
 using Coupon.Forms.Common;
 using Coupon.Forms.Provider;
 using Coupon.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Coupon.Admin.Controllers
 {
-    [Route("api/[controller]")]
-    //[ApiController]
-    public class ProvidersController : Controller
+    [Route("api/providers")]
+    public class ProvidersController : CouponBaseController
     {
         private readonly IProvidersService _providersService;
 
@@ -20,55 +20,38 @@ namespace Coupon.Admin.Controllers
         }
 
         [HttpPost]
-        [Route("", Name = nameof(CreateProvider))]
         public async Task<IActionResult> CreateProvider([FromBody] ProviderCreateForm createForm)
         {
-            try
-            {
-                var result = await _providersService.CreateAsync(createForm);
-                return CreatedAtRoute(nameof(CreateProvider), result);
-            }
-            catch (CouponException ex)
-            {
-                //TODO: вынести это в фильтр
-                ModelState.AddModelError(ex.Field, ex.Message);
-                return new BadRequestObjectResult(ModelState);
-            }
+            var result = await _providersService.CreateAsync(createForm);
+            return CreatedAtRoute(nameof(GetProvider), new { id = result.Id }, result);
         }
 
-        [HttpGet]
-        [Route("/{id}")]
+        [HttpGet("{id:guid}", Name = nameof(GetProvider))]
         public async Task<IActionResult> GetProvider(Guid id)
         {
-            //TODO: move to a filter
-            if (id.Equals(Guid.Empty))
-            {
-                ModelState.AddModelError(nameof(id), "Id не может быть пустым.");
-                return new BadRequestObjectResult(ModelState);
-            }
-            try
-            {
-                var result = await _providersService.GetAsync(id);
-                return Ok(result);
-            }
-            catch (NotFoundException)
-            {
-                //TODO: зачем передавать объект?
-                return NotFound();
-            }
-            //TODO: move to separate method
-            catch (CouponException ex)
-            {
-                ModelState.AddModelError(ex.Field, ex.Message);
-                return new BadRequestObjectResult(ModelState);
-            }
+            var result = await _providersService.GetAsync(id);
+            return Ok(result);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetList(PagingForm form)
         {
             var res = await _providersService.ListAsync(form);
-            return Ok(res);
+            var total = await _providersService.TotalAsync(form);
+            form.Total = total;
+            var listResult = new ListResult<IEnumerable<ProviderDto>>
+            {
+                Paging = form,
+                Result = res
+            };
+            return Ok(listResult);
+        }
+
+        [HttpPut("{id:guid}")]
+        public async Task<IActionResult> Update(Guid id, [FromBody]ProviderUpdateForm form)
+        {
+            var result = await _providersService.UpdateAsync(id, form);
+            return Ok(result);
         }
     }
 }

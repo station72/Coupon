@@ -1,72 +1,57 @@
-import { Component, OnInit, ElementRef, ViewChild, AfterViewInit } from "@angular/core";
-import { FormBuilder, FormGroup, Validators, FormControl } from "@angular/forms";
-import { HttpClient, HttpErrorResponse } from "@angular/common/http";
-import { Observable } from "rxjs";
+import { Component, OnInit } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
 import { Router } from "@angular/router";
 import { BadInputErrorsService } from "../../../../shared/services/bad-input-errors.service";
 import { ProviderService } from "../../services/provider.service";
+import { ProviderBaseComponent } from "../provider-base/provider-base.component";
 
 @Component({
   selector: "providers-create",
   templateUrl: "provider-create.component.html",
   providers: [ProviderService]
 })
-export class ProviderCreateComponent implements OnInit {
-  public createForm: FormGroup;
-  public submitted = false;
+export class ProviderCreateComponent extends ProviderBaseComponent
+  implements OnInit {
+  public form: FormGroup;
+  public submitClicked = false;
   public loading = false;
 
   public title: FormControl;
   public email: FormControl;
 
-  @ViewChild("submitBtn")
-  public submitBtn: ElementRef
-
   constructor(
     private providerService: ProviderService,
     private route: Router,
-    private badInput: BadInputErrorsService
-  ) {}
+    private badInputService: BadInputErrorsService
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
-    this.providerService.getList();
+    this.title = super.getFormControl("title");
+    this.email = super.getFormControl("email");
 
-    this.title = new FormControl({value: '', disabled: false}, Validators.required);
-    this.email = new FormControl({value: '', disabled: false}, [Validators.required, Validators.email]);
-
-    this.createForm = new FormGroup({
+    this.form = new FormGroup({
       title: this.title,
       email: this.email
     });
   }
 
-  get f() : FormGroup {
-    return this.createForm;
-  }
-
   onSubmit() {
-    this.submitted = true;
-
-    if (this.createForm.invalid) {
-      console.log(this.createForm);
+    this.submitClicked = true;
+    if (this.form.invalid) {
       return;
     }
-
     this.loading = true;
+    var serialized = JSON.stringify(this.form.getRawValue());
 
-    var serialized = JSON.stringify(this.createForm.getRawValue());
     this.providerService.create(serialized).subscribe(
-      (provider)=>{
-        this.route.navigate(['providers']);
-      }, 
-      (error)=>{
-        this.loading = false;        
-        let httpError = error as HttpErrorResponse;
-        if(httpError.status === 400){
-          this.badInput.showHttpError(httpError);
-          return;
-        }
-        console.error(httpError);
+      provider => {
+        this.route.navigate(["providers"]);
+      },
+      error => {
+        this.loading = false;
+        super.showServerErrors(error, this.form, this.badInputService);
       }
     );
   }

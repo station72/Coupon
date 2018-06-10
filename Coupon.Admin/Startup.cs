@@ -11,14 +11,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using System.Linq;
 using System.Security.Claims;
-using System;
-using Microsoft.AspNetCore.Cors.Infrastructure;
+using System.Threading.Tasks;
+using System.Net;
+using Microsoft.AspNetCore.SpaServices.AngularCli;
 
 namespace Coupon.Admin
 {
@@ -37,32 +37,43 @@ namespace Coupon.Admin
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
-                    builder => builder.WithOrigins("http://localhost:4200")
+                    builder => builder
+                    .SetIsOriginAllowed(origin =>
+                    {
+                        return origin == "http://localhost:4200";
+                    })
                     .AllowAnyHeader()
                     .AllowAnyMethod()
                     .AllowCredentials());
             });
+
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
+            {
+                o.AccessDeniedPath = new PathString("/api/auth/accessdenied");
+                o.Events.OnRedirectToLogin = context =>
                 {
-                    o.Cookie = new CookieBuilder()
-                    {
-                        Name = ".auth",
-                        HttpOnly = true,
-                        Expiration = TimeSpan.FromDays(1)
-                    };
-                    o.LoginPath = new PathString("/api/auth/login");
-                });
+                    context.Response.Headers["Location"] = (new PathString("/api/auth/login").ToString());
+                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                    return Task.CompletedTask;
+                };
+                o.Cookie = new CookieBuilder()
+                {
+                    Name = ".auth",
+                    HttpOnly = true,
+                    //Expiration = TimeSpan.FromSeconds(20)  //it does not affect
+                };
+                o.LoginPath = new PathString("/api/auth/login");
+            });
 
             AddAuthorization(services);
 
             services.AddLogging();
-
             services.AddMvc(opt =>
             {
                 opt.Filters.Add(new ValidationInputAttribute());
+                opt.Filters.Add(new UnhandledExceptionAttribute());
             });
-            //.SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             services.AddSpaStaticFiles(c =>
             {
@@ -83,6 +94,7 @@ namespace Coupon.Admin
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
 
             if (env.IsDevelopment())
@@ -94,20 +106,19 @@ namespace Coupon.Admin
                 //app.UseHsts();
             }
             //app.UseHttpsRedirection();
-            app.UseCors("CorsPolicy");
             app.UseStaticFiles();
-            app.UseSpaStaticFiles();
+            //app.UseSpaStaticFiles();
             app.UseMvc(routes =>
             {
-                routes.MapRoute(name: "default", template: "{controller}/{action=index}/{id}");
+                routes.MapRoute(name: "default", template: "{controller}/{action}/{id?}");
             });
-
+            /*
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
+                //spa.Options.SourcePath = "ClientApp";
 
                 //spa.UseSpaPrerendering(options =>
                 //{
@@ -126,6 +137,8 @@ namespace Coupon.Admin
                 //    spa.UseAngularCliServer(npmScript: "start");
                 //}
             });
+            */
+            
         }
 
         private IServiceCollection AddAuthorization(IServiceCollection services)

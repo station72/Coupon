@@ -4,6 +4,7 @@ import { BadInputErrorsService } from '../../shared/services/bad-input-errors.se
 import { BrowserModule } from '@angular/platform-browser';
 import { BadInputErrorsComponent } from './components/bad-input-errors/bad-input-errors.component';
 import { HttpService } from './services/http.service';
+import { FieldErrorDisplayComponent } from './components/field-error-display/field-error-display.component';
 
 @NgModule({
   imports: [
@@ -11,14 +12,16 @@ import { HttpService } from './services/http.service';
     BrowserModule
   ],
   declarations: [
-    BadInputErrorsComponent
+    BadInputErrorsComponent,
+    FieldErrorDisplayComponent
   ],
   providers:[
     BadInputErrorsService
   ],
   exports:[
     SharedRoutingModule,
-    BadInputErrorsComponent
+    BadInputErrorsComponent,
+    FieldErrorDisplayComponent
   ]
 })
 export class SharedModule {
