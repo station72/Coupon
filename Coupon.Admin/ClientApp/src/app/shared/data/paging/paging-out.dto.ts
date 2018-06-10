@@ -1,5 +1,5 @@
 export interface PagingOutDto{
     offset: number,
-    count: number,
+    limit: number,
     total?: number
 }

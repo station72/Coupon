@@ -21,11 +21,12 @@ export class HttpService {
     return this.baseUrl + uri;
   }
 
-  public get<T>(uri): Observable<HttpResponse<T>>{
+  public get<T>(uri: string, params = {}): Observable<HttpResponse<T>>{
     if(isDevMode()){
       console.log("GET uri = " + uri);
     }
     return this.http.get<T>(this.getUrl(uri), {
+      params : params, 
       observe: this.observe,
       withCredentials: this.withCredentials,
       headers: this.headers

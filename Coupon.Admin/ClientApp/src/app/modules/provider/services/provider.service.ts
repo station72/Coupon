@@ -26,7 +26,7 @@ export class ProviderService {
   }
 
   getList(data: PagingOutDto): Observable<ListResult<ProviderDto>> {
-    return this.http.get<ListResult<ProviderDto>>(this.serviceBaseUrl).pipe(
+    return this.http.get<ListResult<ProviderDto>>(this.serviceBaseUrl, data).pipe(
       map(response => {
         return response.body;
       })

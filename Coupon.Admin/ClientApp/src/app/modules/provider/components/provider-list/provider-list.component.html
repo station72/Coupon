@@ -12,7 +12,7 @@
       <tr>
         <th>Название</th>
         <th>Email</th>
-        <th></th>        
+        <th></th>
       </tr>
     </thead>
     <tbody>
@@ -28,18 +28,16 @@
   </table>
 </div>
 
-<nav aria-label="Page navigation example">
+<nav>
   <ul class="pagination justify-content-center">
-    <li class="page-item disabled">
-      <a class="page-link" href="#" tabindex="-1">Previous</a>
+    <li class="page-item" [ngClass]="{ disabled: currentPage === 1}">
+      <a class="page-link" (click)="onPrevPage()">Назад</a>
     </li>
-    <!-- <li *ngFor="let page in pages" class="page-item">
-      <a class="page-link" href="#">1</a>
-    </li> -->
-    <!-- <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li> -->
-    <li class="page-item">
-      <a class="page-link" href="#">Next</a>
+    <li class="page-item" *ngFor="let page of pages" [ngClass]="{ active : isCurrentPage(page)}">
+      <a class="page-link" (click)="setPage(page)">{{page}}</a>
+    </li>
+    <li class="page-item" [ngClass]="{ disabled: currentPage === pages.length}">
+      <a class="page-link" (click)="onNextPage()">Вперед</a>
     </li>
   </ul>
 </nav>
