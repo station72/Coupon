@@ -4,12 +4,14 @@ using Coupon.Dto;
 using Coupon.Forms.Admin;
 using Coupon.Forms.Common;
 using Coupon.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Coupon.Admin.Controllers
 {
     [Produces("application/json")]
     [Route("api/admins")]
+    [EnableCors("CorsPolicy")]
     public class AdminsController : Controller
     {
         private readonly IAdminService _adminService;
@@ -55,7 +57,7 @@ namespace Coupon.Admin.Controllers
             return Ok(updated);
         }
 
-        [HttpPut("{id:int}")]
+        [HttpDelete("{id:int}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _adminService.DeleteAsync(id);

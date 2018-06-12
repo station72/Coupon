@@ -5,7 +5,7 @@ import { ProviderCreateComponent } from "./components/provider-create/provider-c
 import { ProviderRootComponent } from "./components/provider-root/provider-root.component";
 import { ProviderEditComponent } from "./components/provider-edit/provider-edit.component";
 import { SuperAdminGuard } from "../../shared/guards/super-admin.guard";
-import { ProviderEditResolver } from "./components/provider-edit/provider-edit.resolver";
+import { ProviderEditResolver } from "./resolvers/provider-edit.resolver";
 
 const routes: Routes = [
     { 

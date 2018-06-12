@@ -9,7 +9,7 @@ import { ProviderEditComponent } from "./components/provider-edit/provider-edit.
 import { ProviderRootComponent } from './components/provider-root/provider-root.component';
 import { SharedModule } from "../shared/shared.module";
 import { ProviderService } from "./services/provider.service";
-import { ProviderEditResolver } from "./components/provider-edit/provider-edit.resolver";
+import { ProviderEditResolver } from "./resolvers/provider-edit.resolver";
 
 @NgModule({
     imports:[

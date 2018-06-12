@@ -23,4 +23,8 @@ export class NavMenuComponent {
   isAdminOrHight():boolean{
     return this.authService.isLoggedIn() && this.authService.getCurrentUser().role >= UserRole.Admin;
   }
+
+  isSuperAdmin():boolean{
+    return this.authService.isLoggedIn() && this.authService.getCurrentUser().role === UserRole.SuperAdmin;
+  }
 }

@@ -5,6 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BadInputErrorsComponent } from './components/bad-input-errors/bad-input-errors.component';
 import { HttpService } from './services/http.service';
 import { FieldErrorDisplayComponent } from './components/field-error-display/field-error-display.component';
+import { ListPaginationComponent } from './components/list-pagination/list-pagination.component';
+import { EnumAsStringPipe } from './pipes/enum-as-string.pipe';
 
 @NgModule({
   imports: [
@@ -13,7 +15,9 @@ import { FieldErrorDisplayComponent } from './components/field-error-display/fie
   ],
   declarations: [
     BadInputErrorsComponent,
-    FieldErrorDisplayComponent
+    FieldErrorDisplayComponent,
+    ListPaginationComponent,
+    EnumAsStringPipe
   ],
   providers:[
     BadInputErrorsService
@@ -21,7 +25,9 @@ import { FieldErrorDisplayComponent } from './components/field-error-display/fie
   exports:[
     SharedRoutingModule,
     BadInputErrorsComponent,
-    FieldErrorDisplayComponent
+    FieldErrorDisplayComponent,
+    ListPaginationComponent,
+    EnumAsStringPipe
   ]
 })
 export class SharedModule {

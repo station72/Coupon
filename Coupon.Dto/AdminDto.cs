@@ -11,5 +11,7 @@ namespace Coupon.Dto
         public string Login { get; set; }
 
         public AdminRole Role { get; set; }
+
+        public string Email { get; set; }
     }
 }

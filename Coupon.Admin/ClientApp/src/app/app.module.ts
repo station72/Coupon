@@ -12,6 +12,7 @@ import { ErrorsModule } from './modules/errors/errors.module';
 import { ProvidersModule } from './modules/provider/providers.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { NotificationService } from './shared/services/notifications.service';
+import { AdminsModule } from './modules/admins/admins.module';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { NotificationService } from './shared/services/notifications.service';
     SharedModule.forRoot(),
     AppRoutingModule,
     AuthModule,
+    AdminsModule,
     ProvidersModule,
     ErrorsModule,
 
