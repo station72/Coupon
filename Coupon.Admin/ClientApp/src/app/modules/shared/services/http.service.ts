@@ -54,4 +54,15 @@ export class HttpService {
       headers: this.headers
     })
   }
+
+  delete(uri: string): Observable<any> {
+    if(isDevMode()){
+      console.log("DELETE uri = " + uri);
+    }
+    return this.http.delete(this.getUrl(uri), {
+      observe: this.observe,
+      withCredentials: this.withCredentials,
+      headers: this.headers
+    })
+  }
 }

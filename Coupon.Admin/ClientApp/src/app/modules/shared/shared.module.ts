@@ -7,27 +7,34 @@ import { HttpService } from './services/http.service';
 import { FieldErrorDisplayComponent } from './components/field-error-display/field-error-display.component';
 import { ListPaginationComponent } from './components/list-pagination/list-pagination.component';
 import { EnumAsStringPipe } from './pipes/enum-as-string.pipe';
+import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
+import { ModalConfirmComponent } from './components/modal-confirm/modal-confirm.component';
 
 @NgModule({
   imports: [
     SharedRoutingModule,
-    BrowserModule
+    BrowserModule,
+    ModalModule.forRoot()
   ],
   declarations: [
     BadInputErrorsComponent,
     FieldErrorDisplayComponent,
     ListPaginationComponent,
-    EnumAsStringPipe
+    EnumAsStringPipe,
+    ModalConfirmComponent
   ],
   providers:[
-    BadInputErrorsService
+    BadInputErrorsService,
+    BsModalService
   ],
   exports:[
     SharedRoutingModule,
     BadInputErrorsComponent,
     FieldErrorDisplayComponent,
     ListPaginationComponent,
-    EnumAsStringPipe
+    EnumAsStringPipe,
+    ModalModule,
+    ModalConfirmComponent
   ]
 })
 export class SharedModule {

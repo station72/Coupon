@@ -30,3 +30,8 @@
       <button [disabled]="loading" class="btn btn-primary">Сохранить</button>
   </div>
 </form>
+<modal-confirm 
+  (confirm)="onConfirmedDelete()" 
+  [showSubject]="confirmDelSubject" 
+  [confirmText]="'Вы хотите безвозвратно удалить администратора?'">
+</modal-confirm>

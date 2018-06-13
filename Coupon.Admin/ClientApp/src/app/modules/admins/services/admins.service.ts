@@ -36,4 +36,10 @@ export class AdminsService {
       })
     );
   }
+
+  delete(id: string): any {
+    return this.http.delete(this.uri + "/"+ id).pipe(map(res=>{
+      return res.body;
+    }))
+  }
 }

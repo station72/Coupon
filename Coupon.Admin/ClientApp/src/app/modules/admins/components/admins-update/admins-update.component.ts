@@ -1,23 +1,27 @@
-import { Component, OnInit } from "@angular/core";
-import { BaseComponent } from "../../../../shared/components/base.component";
+import { AfterContentInit, Component, OnInit, TemplateRef } from "@angular/core";
 import { FormGroup } from "@angular/forms";
-import { AdminFormFactoryService } from "../../services/admin-form-factory.service";
 import { ActivatedRoute, Router } from "@angular/router";
-import { AdminDto } from "../../dto/admin.dto";
-import { AdminsService } from "../../services/admins.service";
+import { Subject } from "rxjs";
+import { BaseComponent } from "../../../../shared/components/base.component";
 import { BadInputErrorsService } from "../../../../shared/services/bad-input-errors.service";
+import { AdminDto } from "../../dto/admin.dto";
+import { AdminFormFactoryService } from "../../services/admin-form-factory.service";
+import { AdminsService } from "../../services/admins.service";
 
 @Component({
   selector: "app-admins-update",
   templateUrl: "./admins-update.component.html",
   styleUrls: ["./admins-update.component.css"]
 })
-export class AdminsUpdateComponent extends BaseComponent implements OnInit {
+export class AdminsUpdateComponent extends BaseComponent
+  implements OnInit, AfterContentInit {
   public form: FormGroup;
   private admin: AdminDto;
   public loading = false;
 
   private fieldNames: string[] = ["login", "email", "name", "role"];
+
+  public confirmDelSubject: Subject<any> = new Subject();
 
   constructor(
     private adminService: AdminsService,
@@ -28,6 +32,8 @@ export class AdminsUpdateComponent extends BaseComponent implements OnInit {
   ) {
     super();
   }
+
+  ngAfterContentInit(): void {}
 
   ngOnInit() {
     this.initForm();
@@ -60,7 +66,7 @@ export class AdminsUpdateComponent extends BaseComponent implements OnInit {
     }
   }
 
-  //to base class  
+  //to base class
   onSubmit() {
     this.submitClicked = true;
     if (this.form.invalid) {
@@ -79,4 +85,16 @@ export class AdminsUpdateComponent extends BaseComponent implements OnInit {
       }
     );
   }
+
+  onDelete(template: TemplateRef<any>) {
+    this.confirmDelSubject.next();
+  }
+
+  onConfirmedDelete() {
+    this.adminService.delete(this.admin.id).subscribe(res => {
+      this.router.navigate(["admins"]);
+    });
+  }
+
+  onBlock() {}
 }
