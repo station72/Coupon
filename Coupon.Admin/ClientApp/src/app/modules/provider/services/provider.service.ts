@@ -26,11 +26,13 @@ export class ProviderService {
   }
 
   getList(data: PagingOutDto): Observable<ListResult<ProviderDto>> {
-    return this.http.get<ListResult<ProviderDto>>(this.serviceBaseUrl, data).pipe(
-      map(response => {
-        return response.body;
-      })
-    );
+    return this.http
+      .get<ListResult<ProviderDto>>(this.serviceBaseUrl, data)
+      .pipe(
+        map(response => {
+          return response.body;
+        })
+      );
   }
 
   create(data: any): Observable<ProviderDto> {
@@ -43,10 +45,19 @@ export class ProviderService {
 
   update(id: string, data: any): Observable<ProviderDto> {
     return this.http
-      .put<ProviderDto>(this.serviceBaseUrl + "/" + id, data).pipe(
+      .put<ProviderDto>(this.serviceBaseUrl + "/" + id, data)
+      .pipe(
         map(response => {
           return response.body;
         })
       );
+  }
+
+  delete(id: string): any {
+    return this.http.delete(this.serviceBaseUrl + "/" + id).pipe(
+      map(res => {
+        return res.body;
+      })
+    );
   }
 }

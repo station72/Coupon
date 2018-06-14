@@ -1,18 +1,17 @@
 import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
+import { FormControl } from "@angular/forms";
 import { Router } from "@angular/router";
 import { BadInputErrorsService } from "../../../../shared/services/bad-input-errors.service";
+import { ProviderFormFactoryService } from "../../services/provider-form-factory.service";
 import { ProviderService } from "../../services/provider.service";
-import { ProviderBaseComponent } from "../provider-base/provider-base.component";
+import { BaseFormComponent } from "src/app/shared/components/base-form.component";
 
 @Component({
   selector: "providers-create",
   templateUrl: "provider-create.component.html",
   providers: [ProviderService]
 })
-export class ProviderCreateComponent extends ProviderBaseComponent
-  implements OnInit {
-  public form: FormGroup;
+export class ProviderCreateComponent extends BaseFormComponent implements OnInit {
   public submitClicked = false;
   public loading = false;
 
@@ -20,21 +19,20 @@ export class ProviderCreateComponent extends ProviderBaseComponent
   public email: FormControl;
 
   constructor(
+    formFactory: ProviderFormFactoryService,
     private providerService: ProviderService,
     private route: Router,
-    private badInputService: BadInputErrorsService
+    private badInputService: BadInputErrorsService,
   ) {
-    super();
+    super(formFactory, badInputService);
+  }
+
+  getControlNames(): string[] {
+    return ["email", "title"];
   }
 
   ngOnInit(): void {
-    this.title = super.getFormControl("title");
-    this.email = super.getFormControl("email");
-
-    this.form = new FormGroup({
-      title: this.title,
-      email: this.email
-    });
+    this.createForm();
   }
 
   onSubmit() {
@@ -51,7 +49,7 @@ export class ProviderCreateComponent extends ProviderBaseComponent
       },
       error => {
         this.loading = false;
-        super.showServerErrors(error, this.form, this.badInputService);
+        super.showServerErrors(error);
       }
     );
   }

@@ -8,6 +8,7 @@ using Coupon.Data;
 using Coupon.Data.Model;
 using Coupon.Dto;
 using Coupon.Forms.Common;
+using Coupon.Forms.Common.Interfaces;
 using Coupon.Forms.Provider;
 using Microsoft.EntityFrameworkCore;
 
@@ -26,8 +27,10 @@ namespace Coupon.Services
             _mapper = mapper;
         }
 
-        public async Task<ProviderDto> CreateAsync(ProviderCreateForm form)
+        public async Task<ProviderDto> CreateAsync(INormalized<ProviderCreateForm> rawForm)
         {
+            var form = rawForm.Normalize();
+
             var emailExists = await _db.Providers
                 .AnyAsync(u => u.Email == form.Email);
 
@@ -84,28 +87,25 @@ namespace Coupon.Services
             return count;
         }
 
-        public async Task<ProviderDto> UpdateAsync(Guid id, ProviderUpdateForm form)
+        public async Task<ProviderDto> UpdateAsync(Guid id, INormalized<ProviderUpdateForm> rawForm)
         {
-            form.Title = form.Title.Trim();
-            form.Email = form.Email.Trim();
+            var form = rawForm.Normalize();
 
             var provider = await _db.Providers
-                .AsNoTracking()
                 .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
 
             if (provider == null)
                 throw new NotFoundException();
 
             var isEmailOccupied = await _db.Providers
-                .AnyAsync(u => u.Email.Equals(form.Email, StringComparison.InvariantCultureIgnoreCase) 
+                .AnyAsync(u => u.Email.Equals(form.Email, StringComparison.InvariantCultureIgnoreCase)
                 && u.Id != id && !u.IsDeleted);
 
             if (isEmailOccupied)
                 throw new CouponException("Поставщик с таким email уже есть!!!", nameof(form.Email));
 
             var isTitleOccupied = await _db.Providers
-                .AnyAsync(u => u.Title.Equals(form.Title, StringComparison.InvariantCultureIgnoreCase) 
-                && u.Id != id && !u.IsDeleted);
+                .AnyAsync(u => u.Title == form.Title && u.Id != id && !u.IsDeleted);
 
             if (isTitleOccupied)
                 throw new CouponException("Поставщик с таким именем уже есть!!!", nameof(form.Title));

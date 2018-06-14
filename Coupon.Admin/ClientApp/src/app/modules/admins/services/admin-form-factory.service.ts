@@ -2,7 +2,7 @@ import { Injectable } from "@angular/core";
 import { FormControl, Validators } from "@angular/forms";
 
 @Injectable()
-export class AdminFormFactoryService{
+export class AdminFormFactoryService implements IFormFactory{
     getControl(controlName: string): FormControl{
         switch (controlName) {
             case 'login':
@@ -17,4 +17,8 @@ export class AdminFormFactoryService{
                 throw new Error("Could not resolve formControl " + controlName);
         }
     }
+}
+
+export interface IFormFactory{
+    getControl(controlName: string) : FormControl;
 }

@@ -2,41 +2,32 @@ import { AfterContentInit, Component, OnInit, TemplateRef } from "@angular/core"
 import { FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Subject } from "rxjs";
-import { BaseComponent } from "../../../../shared/components/base.component";
 import { BadInputErrorsService } from "../../../../shared/services/bad-input-errors.service";
 import { AdminDto } from "../../dto/admin.dto";
 import { AdminFormFactoryService } from "../../services/admin-form-factory.service";
 import { AdminsService } from "../../services/admins.service";
+import { BaseFormComponent } from "src/app/shared/components/base-form.component";
 
 @Component({
   selector: "app-admins-update",
   templateUrl: "./admins-update.component.html",
   styleUrls: ["./admins-update.component.css"]
 })
-export class AdminsUpdateComponent extends BaseComponent
-  implements OnInit, AfterContentInit {
-  public form: FormGroup;
+export class AdminsUpdateComponent extends BaseFormComponent {
   private admin: AdminDto;
   public loading = false;
-
-  private fieldNames: string[] = ["login", "email", "name", "role"];
 
   public confirmDelSubject: Subject<any> = new Subject();
 
   constructor(
+    formFactory: AdminFormFactoryService,
+    badInputService: BadInputErrorsService,
     private adminService: AdminsService,
-    private formFactory: AdminFormFactoryService,
     private route: ActivatedRoute,
     private router: Router,
-    private badInputService: BadInputErrorsService
   ) {
-    super();
-  }
-
-  ngAfterContentInit(): void {}
-
-  ngOnInit() {
-    this.initForm();
+    super(formFactory, badInputService);
+    this.createForm();
 
     this.route.data.subscribe(data => {
       const admin = data["admin"] as AdminDto;
@@ -48,22 +39,8 @@ export class AdminsUpdateComponent extends BaseComponent
     });
   }
 
-  //to base class
-  private initForm() {
-    const formInputs = {};
-    for (const fieldName of this.fieldNames) {
-      formInputs[fieldName] = this.formFactory.getControl(fieldName);
-    }
-    this.form = new FormGroup(formInputs);
-  }
-
-  //to base class
-  private fillFormControls(admin: AdminDto) {
-    for (const fieldName of this.fieldNames) {
-      const value = admin[fieldName];
-      const control = this.form.controls[fieldName];
-      control.setValue(value);
-    }
+  getControlNames(): string[] {
+    return ['login', 'name','email', 'role'];
   }
 
   //to base class
@@ -81,7 +58,7 @@ export class AdminsUpdateComponent extends BaseComponent
       },
       error => {
         this.loading = false;
-        super.showServerErrors(error, this.form, this.badInputService);
+        super.showServerErrors(error);
       }
     );
   }

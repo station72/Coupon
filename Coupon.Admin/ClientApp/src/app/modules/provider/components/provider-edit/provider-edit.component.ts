@@ -1,62 +1,69 @@
-import { Component, OnInit } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { FormGroup, FormControl } from '@angular/forms';
-import { ProviderBaseComponent } from '../provider-base/provider-base.component';
-import { BadInputErrorsService } from '../../../../shared/services/bad-input-errors.service';
-import { ProviderService } from '../../services/provider.service';
+import { Component, OnInit } from "@angular/core";
+import { FormControl, FormGroup } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { BadInputErrorsService } from "../../../../shared/services/bad-input-errors.service";
+import { ProviderFormFactoryService } from "../../services/provider-form-factory.service";
+import { ProviderService } from "../../services/provider.service";
+import { Subject } from "rxjs";
+import { BaseFormComponent } from "src/app/shared/components/base-form.component";
 
 @Component({
-  selector: 'app-provider-edit',
-  templateUrl: './provider-edit.component.html',
-  styleUrls: ['./provider-edit.component.css']
+  selector: "app-provider-edit",
+  templateUrl: "./provider-edit.component.html",
+  styleUrls: ["./provider-edit.component.css"]
 })
-export class ProviderEditComponent extends ProviderBaseComponent implements OnInit {
-  public title: FormControl;
-  public email: FormControl;
-  public form: FormGroup;
-
+export class ProviderEditComponent extends BaseFormComponent {
   public provider: ProviderDto;
   public loading = false;
+  public deleteConfirmTrigger: Subject<any> = new Subject();
   
   constructor(
+    badInputService: BadInputErrorsService,
+    formFactory: ProviderFormFactoryService,
     private actRoute: ActivatedRoute,
     private router: Router,
-    private badInputService: BadInputErrorsService,
-    private providerService: ProviderService
+    private providerService: ProviderService,
   ) {
-    super();
+    super(formFactory, badInputService);
+    
+    this.createForm();
     actRoute.data.subscribe(data => {
-      this.provider = data['provider'];
+      this.provider = data["provider"];
+      this.fillFormControls(this.provider);
     });
-   }
-
-  ngOnInit() {
-    this.title = super.getFormControl('title'); 
-    this.email = super.getFormControl('email');
-    this.form = new FormGroup({
-      title: this.title,
-      email: this.email
-    })
   }
 
-  onSubmit(){
+  getControlNames(): string[] {
+    return ["title", "email"];
+  }
+
+  onDelete(){
+    this.deleteConfirmTrigger.next();
+  }
+
+  onConfirmDelete(){
+    this.providerService.delete(this.provider.id)
+      .subscribe(res=>{
+        this.router.navigate(['providers']);
+      });
+  }
+
+  onSubmit() {
     this.submitClicked = true;
-    if(this.form.invalid){
+    if (this.form.invalid) {
       return;
     }
 
     this.loading = true;
     let serialized = JSON.stringify(this.form.getRawValue());
-    this.providerService.update(this.provider.id, serialized)
-      .subscribe(
-        (res) => this.router.navigate['providers'],
-        (error) => {
-          this.loading = false;
-          super.showServerErrors(error, this.form, this.badInputService);
-        }
-      )
-      
+    this.providerService.update(this.provider.id, serialized).subscribe(
+      res => {
+        this.router.navigate(["providers"]);
+      },
+      error => {
+        this.loading = false;
+        super.showServerErrors(error);
+      }
+    );
   }
-  
 }

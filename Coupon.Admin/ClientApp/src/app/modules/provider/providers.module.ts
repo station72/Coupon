@@ -10,6 +10,7 @@ import { ProviderRootComponent } from './components/provider-root/provider-root.
 import { SharedModule } from "../shared/shared.module";
 import { ProviderService } from "./services/provider.service";
 import { ProviderEditResolver } from "./resolvers/provider-edit.resolver";
+import { ProviderFormFactoryService } from "./services/provider-form-factory.service";
 
 @NgModule({
     imports:[
@@ -28,7 +29,8 @@ import { ProviderEditResolver } from "./resolvers/provider-edit.resolver";
     ],
     providers:[
         ProviderService,
-        ProviderEditResolver
+        ProviderEditResolver,
+        ProviderFormFactoryService
     ]
 })
 export class ProvidersModule{

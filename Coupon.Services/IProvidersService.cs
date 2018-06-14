@@ -1,5 +1,6 @@
 ﻿using Coupon.Dto;
 using Coupon.Forms.Common;
+using Coupon.Forms.Common.Interfaces;
 using Coupon.Forms.Provider;
 using System;
 using System.Collections.Generic;
@@ -9,14 +10,15 @@ namespace Coupon.Services
 {
     public interface IProvidersService
     {
-        Task<ProviderDto> CreateAsync(ProviderCreateForm createForm);
-
-        Task<IEnumerable<ProviderDto>> ListAsync(PagingForm form);
+        Task<ProviderDto> CreateAsync(INormalized<ProviderCreateForm> createForm);
 
         Task<ProviderDto> GetAsync(Guid id);
 
+        Task<ProviderDto> UpdateAsync(Guid id, INormalized<ProviderUpdateForm> form);
+
+        Task<IEnumerable<ProviderDto>> ListAsync(PagingForm form);
+
         Task<int> TotalAsync(PagingForm form);
 
-        Task<ProviderDto> UpdateAsync(Guid id, ProviderUpdateForm form);
     }
 }

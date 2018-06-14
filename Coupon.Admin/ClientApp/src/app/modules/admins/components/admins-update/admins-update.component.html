@@ -5,26 +5,26 @@
 <form [formGroup]="form" (submit)="onSubmit()" novalidate>
   <div class="form-group">
     <label for="login">Логин</label>
-    <input id="login" type="text" formControlName="login" class="form-control" [ngClass]="displayFieldCss('login', form)" />
-    <field-error-display [displayError]="isDisplayError('login', 'required', form)" [errorMsg]="'Логин обязателен для ввода'"></field-error-display>
+    <input id="login" type="text" formControlName="login" class="form-control" [ngClass]="displayFieldCss('login')" />
+    <field-error-display [displayError]="isDisplayError('login', 'required')" [errorMsg]="'Логин обязателен для ввода'"></field-error-display>
   </div>
   <div class="form-group">
     <label for="email">Email</label>
-    <input id="email" type="text" formControlName="email" class="form-control" [ngClass]="displayFieldCss('email', form)" />
-    <field-error-display [displayError]="isDisplayError('email', 'required', form)" [errorMsg]="'Email обязателен для ввода'"></field-error-display>
-    <field-error-display [displayError]="isDisplayError('email', 'email', form)" [errorMsg]="'Введите корректный email'"></field-error-display>
+    <input id="email" type="text" formControlName="email" class="form-control" [ngClass]="displayFieldCss('email')" />
+    <field-error-display [displayError]="isDisplayError('email', 'required')" [errorMsg]="'Email обязателен для ввода'"></field-error-display>
+    <field-error-display [displayError]="isDisplayError('email', 'email')" [errorMsg]="'Введите корректный email'"></field-error-display>
   </div>
   <div class="form-group">
     <label for="name">Имя</label>
-    <input id="name" type="text" formControlName="name" class="form-control" [ngClass]="displayFieldCss('name', form)" />
+    <input id="name" type="text" formControlName="name" class="form-control" [ngClass]="displayFieldCss('name')" />
   </div>
   <div class="form-group">
     <label for="role">Роль</label>
-    <select id="role" formControlName="role" class="form-control" [ngClass]="displayFieldCss('role', form)">
+    <select id="role" formControlName="role" class="form-control" [ngClass]="displayFieldCss('role')">
       <option value="5">Admin</option>
       <option value="10">SuperAdmin</option>
     </select>
-    <field-error-display [displayError]="isDisplayError('login', 'required', form)" [errorMsg]="'Логин обязателен для ввода'"></field-error-display>
+    <field-error-display [displayError]="isDisplayError('login', 'required')" [errorMsg]="'Логин обязателен для ввода'"></field-error-display>
   </div>
   <div class="form-group">
       <button [disabled]="loading" class="btn btn-primary">Сохранить</button>
