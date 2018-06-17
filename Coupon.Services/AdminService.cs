@@ -58,7 +58,7 @@ namespace Coupon.Services
             return _map.Map<AdminDto>(admin);
         }
 
-        public async Task<AdminDto> CreateAsync(INormalized<CreateAdminForm> rawForm)
+        public async Task<AdminDto> CreateAsync(INormalized<AdminCreateForm> rawForm)
         {
             var form = rawForm.Normalize();
 
@@ -109,7 +109,7 @@ namespace Coupon.Services
                 .CountAsync();
         }
 
-        public async Task<AdminDto> UpdateAsync(int id, UpdateAdminForm rawForm)
+        public async Task<AdminDto> UpdateAsync(int id, AdminUpdateForm rawForm)
         {
             var form = rawForm.Normalize();
 
@@ -154,7 +154,7 @@ namespace Coupon.Services
             await _db.SaveChangesAsync();
         }
 
-        public async Task UpdatePasswordAsync(int id, UpdatePasswordForm form)
+        public async Task UpdatePasswordAsync(int id, PasswordUpdateForm form)
         {
             var admin = await _db.AdminUsers
                 .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);

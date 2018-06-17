@@ -10,6 +10,7 @@ export class ProviderRootComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    debugger;
   }
 
 }

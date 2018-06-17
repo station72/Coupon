@@ -9,7 +9,7 @@ import { ProviderEditResolver } from "./resolvers/provider-edit.resolver";
 
 const routes: Routes = [
     { 
-        path: 'providers', 
+        path: '', 
         component: ProviderRootComponent,
         canActivate: [SuperAdminGuard],
         children: [

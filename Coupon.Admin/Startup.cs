@@ -89,6 +89,8 @@ namespace Coupon.Admin
 
             services.AddScoped<IProvidersService, ProvidersService>();
             services.AddScoped<IAdminService, AdminService>();
+            services.AddScoped<ICategoriesService, CategoriesService>();
+
 
         }
 

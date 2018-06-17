@@ -1,7 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { SharedRoutingModule } from './shared-routing.module';
 import { BadInputErrorsService } from '../../shared/services/bad-input-errors.service';
-import { BrowserModule } from '@angular/platform-browser';
 import { BadInputErrorsComponent } from './components/bad-input-errors/bad-input-errors.component';
 import { HttpService } from './services/http.service';
 import { FieldErrorDisplayComponent } from './components/field-error-display/field-error-display.component';
@@ -9,11 +8,12 @@ import { ListPaginationComponent } from './components/list-pagination/list-pagin
 import { EnumAsStringPipe } from './pipes/enum-as-string.pipe';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalConfirmComponent } from './components/modal-confirm/modal-confirm.component';
+import { CommonModule } from '@angular/common';
 
 @NgModule({
   imports: [
     SharedRoutingModule,
-    BrowserModule,
+    CommonModule,
     ModalModule.forRoot()
   ],
   declarations: [
@@ -29,11 +29,12 @@ import { ModalConfirmComponent } from './components/modal-confirm/modal-confirm.
   ],
   exports:[
     SharedRoutingModule,
+    CommonModule,
+    ModalModule,
     BadInputErrorsComponent,
     FieldErrorDisplayComponent,
     ListPaginationComponent,
     EnumAsStringPipe,
-    ModalModule,
     ModalConfirmComponent
   ]
 })

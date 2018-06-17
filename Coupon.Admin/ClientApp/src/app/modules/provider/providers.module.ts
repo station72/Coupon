@@ -1,7 +1,6 @@
 import { NgModule } from "@angular/core";
 import { ProvidersRoutingModule } from "./providers-routing.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { BrowserModule } from "@angular/platform-browser";
 import { HttpClientModule } from "@angular/common/http";
 import { ProviderCreateComponent } from "./components/provider-create/provider-create.component";
 import { ProviderListComponent } from "./components/provider-list/provider-list.component";
@@ -17,8 +16,6 @@ import { ProviderFormFactoryService } from "./services/provider-form-factory.ser
         ProvidersRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        BrowserModule,
-        HttpClientModule,
         SharedModule
     ],
     declarations:[

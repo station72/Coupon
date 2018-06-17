@@ -9,7 +9,6 @@ import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { TopMenuComponent } from './components/top-menu/top-menu.component';
 import { AuthModule } from './modules/auth/auth.module';
 import { ErrorsModule } from './modules/errors/errors.module';
-import { ProvidersModule } from './modules/provider/providers.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { NotificationService } from './shared/services/notifications.service';
 import { AdminsModule } from './modules/admins/admins.module';
@@ -26,7 +25,6 @@ import { AdminsModule } from './modules/admins/admins.module';
     AppRoutingModule,
     AuthModule,
     AdminsModule,
-    ProvidersModule,
     ErrorsModule,
 
     BrowserModule,

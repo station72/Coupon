@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Coupon.Forms.Admin
 {
-    public class UpdateAdminForm : IValidatableObject, INormalized<UpdateAdminForm>
+    public class AdminCreateForm : IValidatableObject, INormalized<AdminCreateForm>
     {
         [Required]
         public string Login { get; set; }
@@ -16,22 +16,27 @@ namespace Coupon.Forms.Admin
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
+        [Required]
+        [MinLength(6)]
+        public string Password { get; set; }
+
         public AdminRole Role { get; set; }
 
-        public UpdateAdminForm Normalize()
+        public AdminCreateForm Normalize()
         {
-            return new UpdateAdminForm
+            return new AdminCreateForm
             {
                 Email = Email.Trim().ToLower(),
                 Login = Login,
                 Name = Name?.Trim(),
+                Password = Password,
                 Role = Role
             };
         }
 
+        //TODO: copy paste
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            //TODO: copy paste
             var errors = new List<ValidationResult>();
             if (!(Role == AdminRole.Admin || Role == AdminRole.SuperAdmin))
             {

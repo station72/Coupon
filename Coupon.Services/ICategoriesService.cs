@@ -1,5 +1,6 @@
 ﻿using Coupon.Dto;
 using Coupon.Forms;
+using Coupon.Forms.Common.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,8 +10,8 @@ namespace Coupon.Services
     {
         Task<CategoryDto> GetAsync(string id);
 
-        Task<IEnumerable<CategoryDto>> ListAsync();
+        Task<IEnumerable<CategoryDto>> ListAsync(int? parentId);
 
-        Task<CategoryDto> CreateAsync(ServiceCreateForm form);
+        Task<CategoryDto> CreateAsync(INormalized<CategoryCreateForm> form);
     }
 }

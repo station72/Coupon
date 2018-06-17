@@ -18,6 +18,9 @@
   <li class="nav-item" *ngIf="isSuperAdmin()">
     <a class="nav-link" [routerLinkActive]='["active"]' [routerLink]='["/admins"]'>Администраторы</a>
   </li>
+  <li class="nav-item" *ngIf="isSuperAdmin()">
+    <a class="nav-link" [routerLinkActive]='["active"]' [routerLink]='["/categories", "tree"]'>Категории</a>
+  </li>
   <!-- <li class="nav-item">
       <a class="nav-link collapsed" href="#providermenu" data-toggle="collapse" data-target="#provider-submenu">Поставщики</a>
       <div class="collapse" id="provider-submenu" aria-expanded="true">

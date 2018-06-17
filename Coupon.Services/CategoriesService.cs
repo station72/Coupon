@@ -1,55 +1,78 @@
-﻿using Coupon.Common;
+﻿using AutoMapper;
+using Coupon.Common;
 using Coupon.Data;
+using Coupon.Data.Model;
 using Coupon.Dto;
+using Coupon.Forms;
+using Coupon.Forms.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Coupon.Forms;
-using AutoMapper;
-using Coupon.Data.Model;
 
 namespace Coupon.Services
 {
     public class CategoriesService : ICategoriesService
     {
-        private readonly CouponDbContext _dbContext;
-        private readonly IMapper _mapper;
+        private readonly CouponDbContext _db;
+        private readonly IMapper _map;
 
-        public CategoriesService(CouponDbContext dbContext, IMapper mapper)
+        public CategoriesService(
+            CouponDbContext dbContext,
+            IMapper mapper)
         {
-            _dbContext = dbContext;
-            _mapper = mapper;
+            _db = dbContext;
+            _map = mapper;
         }
 
-        public async Task<CategoryDto> CreateAsync(ServiceCreateForm form)
+        public async Task<CategoryDto> CreateAsync(INormalized<CategoryCreateForm> rawForm)
         {
+            var form = rawForm.Normalize();
+
             var categoryToCreation = new Categories()
             {
                 Title = form.Title,
                 FriendlyUrl = form.FriendlyUrl
             };
 
-            var dbEntity = _dbContext.Categories.Add(categoryToCreation);
-            await _dbContext.SaveChangesAsync();
+            var dbEntity = _db.Categories.Add(categoryToCreation);
+            await _db.SaveChangesAsync();
 
-            return _mapper.Map<CategoryDto>(dbEntity.Entity);
+            return _map.Map<CategoryDto>(dbEntity.Entity);
         }
 
         public async Task<CategoryDto> GetAsync(string id)
         {
-            var service = await _dbContext.Categories
-                .FirstOrDefaultAsync(u => u.FriendlyUrl == id);
+            var q = _db.Categories
+            .AsNoTracking()
+            .AsQueryable();
 
-            if (service == null)
-                throw new CouponException("");
+            Categories category;
+            int intId;
+            if (int.TryParse(id, out intId))
+            {
+                category = await q.FirstOrDefaultAsync(u => u.Id == intId);
+            }
+            else
+            {
+                category = await q.FirstOrDefaultAsync(u => u.FriendlyUrl == id);
+            }
 
-            return _mapper.Map<CategoryDto>(service);
+            if (category == null)
+                throw new NotFoundException();
+
+            return _map.Map<CategoryDto>(category);
         }
 
-        public Task<IEnumerable<CategoryDto>> ListAsync()
+        public async Task<IEnumerable<CategoryDto>> ListAsync(int? parentId)
         {
-            throw new NotImplementedException();
+            var list = await _db.Categories
+               .AsNoTracking()
+               //.Where(u => u.ParentId == parentId && !u.IsDeleted)
+               .ToArrayAsync();
+
+            return list.Select(_map.Map<CategoryDto>);
         }
     }
 }

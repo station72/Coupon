@@ -1,6 +1,6 @@
 ﻿namespace Coupon.Forms.Admin
 {
-    public class UpdatePasswordForm
+    public class PasswordUpdateForm
     {
         public string Password { get; set; }
     }

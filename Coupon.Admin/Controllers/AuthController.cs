@@ -73,7 +73,7 @@ namespace Coupon.Admin.Controllers
         }
 
         [HttpPut("{id:int}/password")]
-        public async Task<IActionResult> UpdatePassword(int id, UpdatePasswordForm form)
+        public async Task<IActionResult> UpdatePassword(int id, PasswordUpdateForm form)
         {
             await _adminService.UpdatePasswordAsync(id, form);
             return Ok();

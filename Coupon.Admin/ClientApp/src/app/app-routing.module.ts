@@ -5,7 +5,10 @@ import { ProviderGuard } from "./shared/guards/provider.guard";
 
 const routes: Routes = [
     { path: 'home', component: HomeComponent, canActivate:[ProviderGuard] },
-    { path: '', redirectTo: 'home', pathMatch: 'full' },    
+    { path: '', redirectTo: 'home', pathMatch: 'full' },
+    { path: 'providers', loadChildren: './modules/provider/providers.module#ProvidersModule'},
+    { path: 'mainpage', loadChildren: './modules/mainpage/mainpage.module#MainpageModule'  },
+    { path: 'categories', loadChildren: './modules/categories/categories.module#CategoriesModule'  },
   ];
 
 @NgModule({
@@ -20,5 +23,4 @@ const routes: Routes = [
     ]
 })
 export class AppRoutingModule{
-
 }

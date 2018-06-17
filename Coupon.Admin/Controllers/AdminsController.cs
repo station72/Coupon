@@ -22,7 +22,7 @@ namespace Coupon.Admin.Controllers
         }
 
         [HttpPost("")]
-        public async Task<IActionResult> Create([FromBody]CreateAdminForm form)
+        public async Task<IActionResult> Create([FromBody]AdminCreateForm form)
         {
             var created = await _adminService.CreateAsync(form);
             return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
@@ -51,7 +51,7 @@ namespace Coupon.Admin.Controllers
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> Update(int id, [FromBody]UpdateAdminForm form)
+        public async Task<IActionResult> Update(int id, [FromBody]AdminUpdateForm form)
         {
             var updated = await _adminService.UpdateAsync(id, form);
             return Ok(updated);

@@ -15,16 +15,16 @@ namespace Coupon.Services
 
         Task<AdminDto> GetAsync(int id);
 
-        Task<AdminDto> CreateAsync(INormalized<CreateAdminForm> rawForm);
+        Task<AdminDto> CreateAsync(INormalized<AdminCreateForm> rawForm);
 
         Task<IEnumerable<AdminDto>> GetListAsync(PagingForm form);
 
         Task<int> GetTotalCount();
 
-        Task<AdminDto> UpdateAsync(int id, UpdateAdminForm form);
+        Task<AdminDto> UpdateAsync(int id, AdminUpdateForm form);
 
         Task DeleteAsync(int id);
 
-        Task UpdatePasswordAsync(int id, UpdatePasswordForm form);
+        Task UpdatePasswordAsync(int id, PasswordUpdateForm form);
     }
 }
