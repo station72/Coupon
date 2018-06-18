@@ -10,7 +10,7 @@ export class CategoriesService {
 
   constructor(private httpService: HttpService) {}
 
-  getList(parentId?: any): Observable<CategoryDto[]> {
+  getList(parentId = ""): Observable<CategoryDto[]> {
     return this.httpService
       .get<CategoryDto[]>(this.baseUrl, {
         parentId: parentId
@@ -20,5 +20,13 @@ export class CategoriesService {
           return res.body;
         })
       );
+  }
+
+  moveTo(id: string | number, to: string | number): Observable<any> {
+    return this.httpService
+      .put<any>(this.baseUrl + "/" + id + "/move", { parentId: to })
+      .pipe(map(res => {
+        return res.body;
+      }))
   }
 }

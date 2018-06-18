@@ -18,6 +18,8 @@ namespace Coupon.Data.Model
 
         public bool IsDeleted { get; set; }
 
+        public bool IsParent { get; set; }
+
         public int? ParentId { get; set; }
 
         [ForeignKey(nameof(ParentId))]

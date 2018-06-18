@@ -19,6 +19,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Net;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Coupon.Data.Utils;
 
 namespace Coupon.Admin
 {
@@ -90,7 +91,7 @@ namespace Coupon.Admin
             services.AddScoped<IProvidersService, ProvidersService>();
             services.AddScoped<IAdminService, AdminService>();
             services.AddScoped<ICategoriesService, CategoriesService>();
-
+            services.AddSingleton<IRawSqlQuery, RawSqlQuery>();
 
         }
 
@@ -186,6 +187,11 @@ namespace Coupon.Admin
 
             return services;
         }
+    }
+
+    public class ConnectionStrings
+    {
+
     }
 
 }

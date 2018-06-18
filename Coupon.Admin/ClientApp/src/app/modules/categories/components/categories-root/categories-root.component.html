@@ -3,6 +3,8 @@
   </p>
   <div><a [routerLink]="['tree']"> Categories </a> </div>
   <div><a [routerLink]="[{outlets:{cat:['create']}}]"> Create </a> </div>
+  <div><a [routerLink]="[{outlets:{cat: null}}]"> Clean outlet </a> </div>
+
   
   
   <router-outlet></router-outlet>

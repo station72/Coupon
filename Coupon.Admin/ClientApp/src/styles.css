@@ -3,6 +3,8 @@
  * Base structure
  */
 
+ @import '~angular-tree-component/dist/angular-tree-component.css';
+
   
   h1 {
     margin-bottom: 20px;

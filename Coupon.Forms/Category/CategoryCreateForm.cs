@@ -21,8 +21,8 @@ namespace Coupon.Forms
         {
             return new CategoryCreateForm
             {
-                FriendlyUrl = FriendlyUrl.Trim(),
-                Title = Title.Trim(),
+                FriendlyUrl = FriendlyUrl?.Trim().ToLower(),
+                Title = Title?.Trim(),
                 ParentId = ParentId
             };
         }

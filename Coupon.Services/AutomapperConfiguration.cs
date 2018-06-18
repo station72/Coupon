@@ -11,6 +11,11 @@ namespace Coupon.Services
             CreateMap<Categories, CategoryDto>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
+                //.ForMember(dest => dest.Children, opt => opt.MapFrom(src => src.Children))
+                .ForMember(dest => dest.FriendlyUrl, opt => opt.MapFrom(src => src.FriendlyUrl))
+                .ForMember(dest => dest.IsParent, opt => opt.MapFrom(src => src.IsParent))
+                .ForMember(dest => dest.Parent, opt => opt.MapFrom(src => src.Parent))
+                .ForMember(dest => dest.ParentId, opt => opt.MapFrom(src => src.ParentId))
                 .ForAllOtherMembers(opt => opt.Ignore());
 
             CreateMap<Products, ProductDto>()
