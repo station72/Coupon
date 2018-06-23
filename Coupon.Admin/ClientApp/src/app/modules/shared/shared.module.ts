@@ -10,12 +10,14 @@ import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalConfirmComponent } from './components/modal-confirm/modal-confirm.component';
 import { CommonModule } from '@angular/common';
 import { BadInputErrorsNoServiceComponent } from './components/bad-input-errors/bad-input-errors-no-service.component';
+import { TooltipModule } from 'ngx-bootstrap';
 
 @NgModule({
   imports: [
     SharedRoutingModule,
     CommonModule,
-    ModalModule.forRoot()
+    ModalModule.forRoot(),
+    TooltipModule.forRoot()
   ],
   declarations: [
     BadInputErrorsComponent,
@@ -38,7 +40,8 @@ import { BadInputErrorsNoServiceComponent } from './components/bad-input-errors/
     FieldErrorDisplayComponent,
     ListPaginationComponent,
     EnumAsStringPipe,
-    ModalConfirmComponent
+    ModalConfirmComponent,
+    TooltipModule
   ]
 })
 export class SharedModule {

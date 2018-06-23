@@ -1,11 +1,10 @@
-import { HttpClient } from "@angular/common/http";
-
+import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { Injectable, OnInit } from "@angular/core";
-import { map, catchError } from "rxjs/operators";
-import { HttpService } from "../../shared/services/http.service";
+import { map } from "rxjs/operators";
 import { ListResult } from "src/app/shared/data/list-result.dto";
 import { PagingOutDto } from "../../../shared/data/paging/paging-out.dto";
+import { HttpService } from "../../shared/services/http.service";
+
 
 @Injectable()
 export class ProviderService {
@@ -53,11 +52,31 @@ export class ProviderService {
       );
   }
 
-  delete(id: string): any {
+  delete(id: string): Observable<any> {
     return this.http.delete(this.serviceBaseUrl + "/" + id).pipe(
       map(res => {
         return res.body;
       })
     );
+  }
+
+  block(id: string | number): Observable<any> {
+    return this.http
+      .post<any>(this.serviceBaseUrl + "/" + id + "/block", {})
+      .pipe(
+        map(res => {
+          return res.body;
+        })
+      );
+  }
+
+  unblock(id: string | number): Observable<any> {
+    return this.http
+      .post<any>(this.serviceBaseUrl + "/" + id + "/unblock", {})
+      .pipe(
+        map(res => {
+          return res.body;
+        })
+      );
   }
 }

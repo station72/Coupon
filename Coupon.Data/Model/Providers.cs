@@ -17,5 +17,7 @@ namespace Coupon.Data.Model
         public string Email { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public bool IsBlocked { get; set; }
     }
 }

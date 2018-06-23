@@ -78,6 +78,18 @@ namespace Coupon.Services
             return list.Select(_mapper.Map<ProviderDto>);
         }
 
+        public async Task SetBlockAsync(Guid id, bool isBlocked)
+        {
+            var provider = await _db.Providers
+                .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
+
+            if (provider == null)
+                throw new NotFoundException();
+
+            provider.IsBlocked = isBlocked;
+            await _db.SaveChangesAsync();
+        }
+
         public async Task<int> TotalAsync(PagingForm form)
         {
             var count = await _db.Providers

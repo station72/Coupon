@@ -1,4 +1,12 @@
 <button class="btn btn-danger" (click)="onDelete()">Удалить поставщика</button>
+<button *ngIf="provider.isBlocked === false" class="btn btn-warning" (click)="onBlock()" tooltip="Заблокирует поставщика">Заблокировать поставщика</button>
+<div *ngIf="provider.isBlocked === true">
+    <div class="alert alert-warning">
+        Поставщик заблокирован
+    </div>
+    <button class="btn btn-warning" (click)="onUnblock()">Разблокировать поставщика</button>
+</div>
+
 <h2>Редактирование поставщика</h2>
 <bad-input-errors></bad-input-errors>
 <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
@@ -6,7 +14,7 @@
         <label for="title">Название</label>
         <input id="title" type="text" formControlName="title" class="form-control" [ngClass]="displayFieldCss('title')" />
         <field-error-display [displayError]="isDisplayError('title', 'required')" [errorMsg]="'Название обязательно для ввода'"></field-error-display>
-        <field-error-display [displayError]="isDisplayError('title', 'maxlength')" [errorMsg]="'Название слишком длинное'"></field-error-display>        
+        <field-error-display [displayError]="isDisplayError('title', 'maxlength')" [errorMsg]="'Название слишком длинное'"></field-error-display>
     </div>
     <div class="form-group">
         <label for="email">Email</label>
@@ -20,3 +28,4 @@
     </div>
 </form>
 <modal-confirm [showSubject]="deleteConfirmTrigger" (confirm)="onConfirmDelete()"></modal-confirm>
+<modal-confirm #blockModal [confirmText]="'Вы уверены, что хотите заблокировать поставщика? Это действие можно будет отменить.'" (confirm)="onConfirmBlock()"></modal-confirm>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ViewChild } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BadInputErrorsService } from "../../../../shared/services/bad-input-errors.service";
@@ -6,6 +6,7 @@ import { ProviderFormFactoryService } from "../../services/provider-form-factory
 import { ProviderService } from "../../services/provider.service";
 import { Subject } from "rxjs";
 import { BaseFormComponent } from "src/app/shared/components/base-form.component";
+import { ModalConfirmComponent } from "../../../shared/components/modal-confirm/modal-confirm.component";
 
 @Component({
   selector: "app-provider-edit",
@@ -16,7 +17,8 @@ export class ProviderEditComponent extends BaseFormComponent {
   public provider: ProviderDto;
   public loading = false;
   public deleteConfirmTrigger: Subject<any> = new Subject();
-  
+  @ViewChild('blockModal') blockModal: ModalConfirmComponent;
+
   constructor(
     badInputService: BadInputErrorsService,
     formFactory: ProviderFormFactoryService,
@@ -28,8 +30,10 @@ export class ProviderEditComponent extends BaseFormComponent {
     
     this.createForm();
     actRoute.data.subscribe(data => {
-      this.provider = data["provider"];
-      this.fillFormControls(this.provider);
+      const provider = data["provider"]; 
+      this.provider = provider;
+      this.fillFormControls(provider);
+      console.log(provider)
     });
   }
 
@@ -46,6 +50,28 @@ export class ProviderEditComponent extends BaseFormComponent {
       .subscribe(res=>{
         this.router.navigate(['providers']);
       });
+  }
+
+  onBlock(){
+    this.blockModal.showModal();
+  }
+
+  onUnblock(){
+    this.providerService.unblock(this.provider.id).subscribe(res=>{
+      this.setProviderBlock(false);
+    })
+  }
+
+  onConfirmBlock(){
+    this.providerService.block(this.provider.id).subscribe(res=>{
+      this.setProviderBlock(true);
+    })
+  }
+
+  setProviderBlock(isBlocked: boolean){
+    const provider = this.provider;
+    provider.isBlocked = isBlocked;
+    this.provider = provider;
   }
 
   onSubmit() {

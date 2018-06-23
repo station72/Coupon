@@ -20,5 +20,6 @@ namespace Coupon.Services
 
         Task<int> TotalAsync(PagingForm form);
 
+        Task SetBlockAsync(Guid id, bool isBlocked);
     }
 }

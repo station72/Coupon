@@ -53,5 +53,19 @@ namespace Coupon.Admin.Controllers
             var result = await _providersService.UpdateAsync(id, form);
             return Ok(result);
         }
+
+        [HttpPost("{id:guid}/block")]
+        public async Task<IActionResult> Block(Guid id)
+        {
+            await _providersService.SetBlockAsync(id, true);
+            return Ok();
+        }
+
+        [HttpPost("{id:guid}/unblock")]
+        public async Task<IActionResult> Unblock(Guid id)
+        {
+            await _providersService.SetBlockAsync(id, false);
+            return Ok();
+        }
     }
 }

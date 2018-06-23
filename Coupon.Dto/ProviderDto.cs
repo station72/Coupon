@@ -9,5 +9,7 @@ namespace Coupon.Dto
         public string Title { get; set; }
 
         public string Email { get; set; }
+
+        public bool IsBlocked { get; set; }
     }
 }
