@@ -1,5 +1,5 @@
 import { FormControl, Validators } from "@angular/forms";
-import { IFormFactory } from "../../admins/services/admin-form-factory.service";
+import { IFormFactory } from "src/app/modules/shared/iform-factory.intarface";
 
 export class ProviderFormFactoryService implements IFormFactory {
   getControl(controlName: string): FormControl {

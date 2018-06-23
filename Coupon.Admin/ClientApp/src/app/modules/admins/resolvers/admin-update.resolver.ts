@@ -13,9 +13,6 @@ export class AdminUpdateResolver implements Resolve<AdminDto> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): AdminDto | Observable<AdminDto> | Promise<AdminDto> {
         const adminId = route.params['id'];
-        if(!adminId){
-            throw new Error("adminId error");
-        }
         return this.adminService.getAdmin(adminId);
     }
 }

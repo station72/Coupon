@@ -17,7 +17,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
 
 export class MainpageComponent {
   constructor(){
-    debugger;
   }
 }
   //<div> <router-outlet name="detail"></router-outlet>

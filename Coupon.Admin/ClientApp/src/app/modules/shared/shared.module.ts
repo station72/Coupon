@@ -9,6 +9,7 @@ import { EnumAsStringPipe } from './pipes/enum-as-string.pipe';
 import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalConfirmComponent } from './components/modal-confirm/modal-confirm.component';
 import { CommonModule } from '@angular/common';
+import { BadInputErrorsNoServiceComponent } from './components/bad-input-errors/bad-input-errors-no-service.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,7 @@ import { CommonModule } from '@angular/common';
   ],
   declarations: [
     BadInputErrorsComponent,
+    BadInputErrorsNoServiceComponent,
     FieldErrorDisplayComponent,
     ListPaginationComponent,
     EnumAsStringPipe,
@@ -32,6 +34,7 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     ModalModule,
     BadInputErrorsComponent,
+    BadInputErrorsNoServiceComponent,
     FieldErrorDisplayComponent,
     ListPaginationComponent,
     EnumAsStringPipe,

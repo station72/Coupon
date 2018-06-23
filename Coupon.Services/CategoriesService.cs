@@ -40,11 +40,14 @@ namespace Coupon.Services
             if (titleIsOccupied)
                 throw new CouponException("Категория с таким названием уже есть", nameof(form.Title));
 
-            var urlIsOccupied = await _db.Categories
-                .AnyAsync(u => !string.IsNullOrEmpty(u.FriendlyUrl) && u.FriendlyUrl == form.FriendlyUrl);
+            if (!string.IsNullOrEmpty(form.FriendlyUrl))
+            {
+                var urlIsOccupied = await _db.Categories
+                    .AnyAsync(u => u.FriendlyUrl == form.FriendlyUrl);
 
-            if (urlIsOccupied)
-                throw new CouponException("Категория с таким Url уже есть", nameof(form.FriendlyUrl));
+                if (urlIsOccupied)
+                    throw new CouponException("Категория с таким Url уже есть", nameof(form.FriendlyUrl));
+            }
 
             if (!form.ParentId.HasValue)
                 return await CreateRootCategory(form);
@@ -122,11 +125,14 @@ namespace Coupon.Services
             if (titleIsOccupied)
                 throw new CouponException("Категория с таким названием уже есть", nameof(form.Title));
 
-            var urlIsOccupied = await _db.Categories
-                .AnyAsync(u => u.Id != id && u.FriendlyUrl == form.FriendlyUrl);
+            if (!string.IsNullOrEmpty(form.FriendlyUrl))
+            {
+                var urlIsOccupied = await _db.Categories
+                    .AnyAsync(u => u.Id != id && u.FriendlyUrl == form.FriendlyUrl);
 
-            if (urlIsOccupied)
-                throw new CouponException("Категория с таким Url уже есть", nameof(form.FriendlyUrl));
+                if (urlIsOccupied)
+                    throw new CouponException("Категория с таким Url уже есть", nameof(form.FriendlyUrl));
+            }
 
             category.FriendlyUrl = form.FriendlyUrl;
             category.Title = form.Title;

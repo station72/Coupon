@@ -20,9 +20,9 @@ export class ProviderCreateComponent extends BaseFormComponent implements OnInit
 
   constructor(
     formFactory: ProviderFormFactoryService,
+    private badInputService: BadInputErrorsService,
     private providerService: ProviderService,
     private route: Router,
-    private badInputService: BadInputErrorsService,
   ) {
     super(formFactory, badInputService);
   }

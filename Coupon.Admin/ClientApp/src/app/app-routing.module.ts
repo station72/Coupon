@@ -15,7 +15,7 @@ const routes: Routes = [
     imports:[
         RouterModule.forRoot(routes, {
             enableTracing: false,
-            errorHandler: (error: any) => console.error(error)
+            // errorHandler: (error: any) => console.error(error)
         })
     ],
     exports:[

@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { FormControl, Validators } from "@angular/forms";
+import { IFormFactory } from "src/app/modules/shared/iform-factory.intarface";
 
 @Injectable()
 export class AdminFormFactoryService implements IFormFactory{
@@ -17,8 +18,4 @@ export class AdminFormFactoryService implements IFormFactory{
                 throw new Error("Could not resolve formControl " + controlName);
         }
     }
-}
-
-export interface IFormFactory{
-    getControl(controlName: string) : FormControl;
 }

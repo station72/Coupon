@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Coupon.Forms;
 using Coupon.Forms.Category;
 using Coupon.Services;

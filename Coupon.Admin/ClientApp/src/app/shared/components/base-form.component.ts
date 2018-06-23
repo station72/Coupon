@@ -1,8 +1,8 @@
 import { HttpErrorResponse } from "@angular/common/http";
 import { FormGroup } from "@angular/forms";
-import { IFormFactory } from "src/app/modules/admins/services/admin-form-factory.service";
 import { BadInputErrorsService } from "../services/bad-input-errors.service";
 import { isUndefined } from "util";
+import { IFormFactory } from "src/app/modules/shared/iform-factory.intarface";
 
 export abstract class BaseFormComponent {
   public form: FormGroup;
@@ -88,7 +88,7 @@ export abstract class BaseFormComponent {
     httpError: HttpErrorResponse
   ): void {
     for (const fieldName of Object.keys(httpError.error)) {
-      const controlName = fieldName.toLowerCase();
+      const controlName = fieldName[0].toLowerCase() + fieldName.substring(1);
       if (!this.form.contains(controlName)) {
         continue;
       }

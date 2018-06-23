@@ -12,13 +12,14 @@ import { ErrorsModule } from './modules/errors/errors.module';
 import { SharedModule } from './modules/shared/shared.module';
 import { NotificationService } from './shared/services/notifications.service';
 import { AdminsModule } from './modules/admins/admins.module';
+import { ContextMenuModule } from 'ngx-contextmenu';
 
 @NgModule({
   declarations: [
     AppComponent,
     TopMenuComponent,
     NavMenuComponent,
-    HomeComponent,
+    HomeComponent
   ],
   imports: [
     SharedModule.forRoot(),
@@ -26,7 +27,10 @@ import { AdminsModule } from './modules/admins/admins.module';
     AuthModule,
     AdminsModule,
     ErrorsModule,
-
+    ContextMenuModule.forRoot({
+      useBootstrap4: true,
+      autoFocus: false
+    }),
     BrowserModule,
     HttpClientModule,
     FormsModule,

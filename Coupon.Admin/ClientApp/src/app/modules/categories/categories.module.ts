@@ -7,12 +7,22 @@ import { CategoriesRootComponent } from "./components/categories-root/categories
 import { CategoriesTreeComponent } from "./components/categories-tree/categories-tree.component";
 import { CategoriesUpdateComponent } from "./components/categories-update/categories-update.component";
 import { CategoriesService } from "./services/categories.service";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { CategoriesFormFactory } from "./services/categories-form-factory";
+import { SharedModule } from "../shared/shared.module";
+import { CategoriesTreeService } from "./services/categories-tree.service";
+import { ContextMenuModule } from "ngx-contextmenu";
+import { CategoryResolver } from "./resolvers/category.resolver";
 
 @NgModule({
   imports: [
     CommonModule,
     TreeModule,
-    CategoriesRoutingModule
+    CategoriesRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
+    SharedModule,
+    ContextMenuModule
   ],
   declarations: [
     CategoriesRootComponent,
@@ -21,7 +31,10 @@ import { CategoriesService } from "./services/categories.service";
     CategoriesCreateComponent,
   ],
   providers:[
-    CategoriesService
+    CategoriesService,
+    CategoriesFormFactory,
+    CategoriesTreeService,
+    CategoryResolver
   ]
 })
 export class CategoriesModule {}

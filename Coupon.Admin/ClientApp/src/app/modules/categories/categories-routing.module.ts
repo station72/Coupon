@@ -4,6 +4,7 @@ import { CategoriesCreateComponent } from "./components/categories-create/catego
 import { CategoriesTreeComponent } from "./components/categories-tree/categories-tree.component";
 import { CategoriesUpdateComponent } from "./components/categories-update/categories-update.component";
 import { CategoriesRootComponent } from "./components/categories-root/categories-root.component";
+import { CategoryResolver } from "./resolvers/category.resolver";
 
 const routes: Routes = [
   {
@@ -25,9 +26,12 @@ const routes: Routes = [
         component: CategoriesTreeComponent
       },
       {
-        path: "update",
+        path: "update/:id",
         component: CategoriesUpdateComponent,
-        outlet: "cat"
+        outlet: "cat",
+        resolve:{
+          category: CategoryResolver
+        }
       },
       {
         path: "create",

@@ -1,3 +1,21 @@
-<p>
-  categories-update works!
-</p>
+
+<h2>Редактирование категории</h2>
+<button [disabled]="loading" (click)="onClose()" class="btn btn-danger pull-right">Отменить и закрыть</button>
+<bad-input-errors></bad-input-errors>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <div class="form-group">
+      <label for="title">Название</label>
+      <textarea id="title" formControlName="title" class="form-control" [ngClass]="displayFieldCss('title')" ></textarea>
+      <field-error-display [displayError]="isDisplayError('title', 'required')" [errorMsg]="'Название обязательно для ввода'"></field-error-display>
+      <field-error-display [displayError]="isDisplayError('title', 'maxlength')" [errorMsg]="'Поле слишком длинное'"></field-error-display>
+  </div>
+  <div class="form-group">
+      <label for="friendlyUrl">Дружественный Url</label>
+      <textarea id="friendlyUrl" formControlName="friendlyUrl" class="form-control" [ngClass]="displayFieldCss('friendlyUrl')" ></textarea>
+      <field-error-display [displayError]="isDisplayError('friendlyUrl', 'maxlength')" [errorMsg]="'Поле слишком длинное'"></field-error-display>
+  </div>
+  <div class="form-group">
+      <button [disabled]="loading" class="btn btn-primary">Сохранить</button>
+      <!-- <a [routerLink]="['../', {outlets:{cat: null}}]" class="btn btn-danger">Отмена</a> -->
+  </div>
+</form>

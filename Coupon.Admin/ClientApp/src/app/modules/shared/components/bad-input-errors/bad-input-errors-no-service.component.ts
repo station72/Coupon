@@ -4,23 +4,15 @@ import { BadInputErrorsService } from 'src/app/shared/services/bad-input-errors.
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
-  selector: 'bad-input-errors',
+  selector: 'bad-input-errors-ns',
   templateUrl: './bad-input-errors.component.html',
   styleUrls: ['./bad-input-errors.component.css']
 })
-export class BadInputErrorsComponent implements OnInit {
+export class BadInputErrorsNoServiceComponent {
 
   public errors: string[] = [];
-  constructor(private badInputService: BadInputErrorsService) {
-   }
 
-  ngOnInit() {
-    this.badInputService.badInputErrors$.subscribe(errors=>{
-      this.errors = Array.from(errors);
-    });
-  }
-
-  close(){
+  public close(){
     this.errors = [];
   }
 
@@ -33,5 +25,4 @@ export class BadInputErrorsComponent implements OnInit {
 
     this.errors = errors;
   }
-
 }

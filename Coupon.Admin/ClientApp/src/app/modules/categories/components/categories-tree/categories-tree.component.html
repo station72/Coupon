@@ -1,71 +1,21 @@
-<p>
-  categories-tree works!
-</p>
-<form>
-  <input #filter (keyup)="filterNodes(filter.value, tree)" placeholder="filter nodes"/>
-</form>
+<bad-input-errors-ns></bad-input-errors-ns>
+
+<modal-confirm 
+  (confirm)="onConfirmedDelete()" 
+  [confirmText]="'Вы хотите безвозвратно удалить категорию?'">
+</modal-confirm>
+
+<context-menu #nodeMenu>
+  <ng-template contextMenuItem *ngFor="let menuAction of menuActions" (execute)="menuAction.execute()" [enabled]="menuAction.enabled">
+    <span>{{menuAction.html()}}</span>
+  </ng-template>
+</context-menu>
+
 <div style="height: 400px; width: 400px; overflow: hidden;">
-  <tree-root
-    #tree
-    [nodes]="nodes"
-    [options]="customTemplateStringOptions"
-    [focused]="true"
-    (event)="onEvent($event)"
-    (initialized)="onInitialized(tree)"
-    (moveNode)="onMoveNode($event)"
-    >
-    <ng-template #treeNodeTemplate let-node>
+  <tree-root #tree [nodes]="nodes" [options]="customTemplateStringOptions" [focused]="true" (event)="onEvent($event)">
+    <ng-template #treeNodeTemplate let-node let-index="index">
       <span title="{{node.data.subTitle}}">{{ node.data.title }}</span>
-      <!-- <span class="pull-right">{{ childrenCount(node) }}</span> -->
-      <button (click)="go($event)">Custom Action</button>
     </ng-template>
-    <ng-template #loadingTemplate>Loading, please hold....</ng-template>
+    <ng-template #loadingTemplate>Загрузка. Пожалуйста, подождите...</ng-template>
   </tree-root>
 </div>
-<br>
-<p>Keys:</p>
-down | up | left | right | space | enter
-<p>Mouse:</p>
-click to select | shift+click to select multi
-<p>API:</p>
-<button (click)="tree.treeModel.focusNextNode()">next node</button>
-<button (click)="tree.treeModel.focusPreviousNode()">previous node</button>
-<button (click)="tree.treeModel.focusDrillDown()">drill down</button>
-<button (click)="tree.treeModel.focusDrillUp()">drill up</button>
-<button (click)="customTemplateStringOptions.allowDrag = true">allowDrag</button>
-<p></p>
-<button
-  [disabled]="!tree.treeModel.getFocusedNode()"
-  (click)="tree.treeModel.getFocusedNode().toggleActivated()">
-  {{ tree.treeModel.getFocusedNode()?.isActive ? 'deactivate' : 'activate' }}
-</button>
-<button
-  [disabled]="!tree.treeModel.getFocusedNode()"
-  (click)="tree.treeModel.getFocusedNode().toggleExpanded()">
-  {{ tree.treeModel.getFocusedNode()?.isExpanded ? 'collapse' : 'expand' }}
-</button>
-<button
-  [disabled]="!tree.treeModel.getFocusedNode()"
-  (click)="tree.treeModel.getFocusedNode().blur()">
-  blur
-</button>
-<button
-  (click)="addNode(tree)">
-  Add Node
-</button>
-<button
-  (click)="activateSubSub(tree)">
-  Activate inner node
-</button>
-<button
-  (click)="tree.treeModel.expandAll()">
-  Expand All
-</button>
-<button
-  (click)="tree.treeModel.collapseAll()">
-  Collapse All
-</button>
-<button
-  (click)="activeNodes(tree.treeModel)">
-  getActiveNodes()
-</button>
