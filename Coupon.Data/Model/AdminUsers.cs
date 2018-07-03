@@ -1,11 +1,12 @@
 ﻿using Coupon.Common.Enums;
+using Coupon.Data.Interfaces;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Coupon.Data.Model
 {
-    public class AdminUsers
+    public class AdminUsers : ILogin
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

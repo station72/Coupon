@@ -5,10 +5,12 @@ namespace Coupon.Dto
 {
     public class AuthUserDto
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
+
+        public Guid Token { get; set; }
 
         public AdminRole Role { get; set; }
 
-        public string Name { get; set; }
+        public int ProviderId { get; set; }
     }
 }

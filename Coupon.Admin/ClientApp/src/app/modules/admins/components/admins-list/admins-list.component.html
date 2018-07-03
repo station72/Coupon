@@ -13,7 +13,8 @@
         <th>Login</th>
         <th>Email</th>
         <th>Имя</th>
-        <th>Роль</th>        
+        <th>Роль</th>
+        <th>Заблокирован</th>
         <th></th>
       </tr>
     </thead>
@@ -22,7 +23,8 @@
         <td>{{admin.login}}</td>
         <td>{{admin.email}}</td>
         <td>{{admin.name}}</td>
-        <td>{{admin.role | enumAsString : UserRole }}</td>        
+        <td>{{admin.role | enumAsString : UserRole }}</td>
+        <td>{{admin.isBlocked | booleanAsString }}</td>
         <td>
           <button (click)="onUpdate(admin.id)">Редактировать</button>
         </td>

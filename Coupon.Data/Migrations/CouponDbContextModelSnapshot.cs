@@ -79,25 +79,97 @@ namespace Coupon.Data.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Coupon.Data.Model.Comments", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Author");
+
+                    b.Property<int>("CountOfUseful");
+
+                    b.Property<int>("CountOfUseles");
+
+                    b.Property<DateTimeOffset>("CreatedAt");
+
+                    b.Property<int>("ProductId");
+
+                    b.Property<string>("Text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("Coupon.Data.Model.Images", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("OriginalPath");
+
+                    b.Property<int?>("ProductsId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductsId");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("Coupon.Data.Model.Products", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AvailableCount");
+
+                    b.Property<string>("Conditions");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("FullTitle");
+
                     b.Property<bool>("IsDeleted");
+
+                    b.Property<Guid>("MainImageId");
+
+                    b.Property<decimal>("NewPrice");
+
+                    b.Property<decimal>("OldPrice");
+
+                    b.Property<bool>("OnSale");
+
+                    b.Property<int>("ProviderId");
+
+                    b.Property<int>("StartAvailableCount");
+
+                    b.Property<int>("State");
 
                     b.Property<string>("Title");
 
+                    b.Property<DateTimeOffset>("ValidFrom");
+
+                    b.Property<DateTimeOffset>("ValidUntil");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("MainImageId");
+
+                    b.HasIndex("ProviderId");
 
                     b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Coupon.Data.Model.Providers", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -107,9 +179,19 @@ namespace Coupon.Data.Migrations
 
                     b.Property<bool>("IsDeleted");
 
+                    b.Property<string>("Login")
+                        .IsRequired()
+                        .HasMaxLength(128);
+
+                    b.Property<string>("PasswordHash");
+
+                    b.Property<string>("PasswordSalt");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(255);
+
+                    b.Property<Guid>("Token");
 
                     b.HasKey("Id");
 
@@ -121,6 +203,34 @@ namespace Coupon.Data.Migrations
                     b.HasOne("Coupon.Data.Model.Categories", "Parent")
                         .WithMany("Children")
                         .HasForeignKey("ParentId");
+                });
+
+            modelBuilder.Entity("Coupon.Data.Model.Comments", b =>
+                {
+                    b.HasOne("Coupon.Data.Model.Products", "Product")
+                        .WithMany("Comments")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Coupon.Data.Model.Images", b =>
+                {
+                    b.HasOne("Coupon.Data.Model.Products")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductsId");
+                });
+
+            modelBuilder.Entity("Coupon.Data.Model.Products", b =>
+                {
+                    b.HasOne("Coupon.Data.Model.Images", "MainImage")
+                        .WithMany()
+                        .HasForeignKey("MainImageId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Coupon.Data.Model.Providers", "Provider")
+                        .WithMany("Products")
+                        .HasForeignKey("ProviderId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

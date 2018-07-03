@@ -11,6 +11,8 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.1.1" />
+    <PackageReference Include="SkiaSharp" Version="1.60.2" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +22,12 @@
     <ProjectReference Include="..\Coupon.Dto\Coupon.Dto.csproj" />
     <ProjectReference Include="..\Coupon.Forms\Coupon.Forms.csproj" />
     <ProjectReference Include="..\Coupon.Utils\Coupon.Utils.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.AspNetCore.Hosting.Abstractions">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.aspnetcore.hosting.abstractions\2.0.3\lib\netstandard2.0\Microsoft.AspNetCore.Hosting.Abstractions.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

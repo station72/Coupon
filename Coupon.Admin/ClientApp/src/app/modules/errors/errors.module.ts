@@ -15,7 +15,7 @@ import { BrowserModule } from '@angular/platform-browser';
     CommonModule,
     RouterModule,
     ErrorRoutingModule,
-    BrowserModule,
+    // BrowserModule
   ],
   declarations: [
     ErrorComponent

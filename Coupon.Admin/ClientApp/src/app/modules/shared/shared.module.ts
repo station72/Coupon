@@ -10,14 +10,21 @@ import { ModalModule, BsModalService } from 'ngx-bootstrap/modal';
 import { ModalConfirmComponent } from './components/modal-confirm/modal-confirm.component';
 import { CommonModule } from '@angular/common';
 import { BadInputErrorsNoServiceComponent } from './components/bad-input-errors/bad-input-errors-no-service.component';
-import { TooltipModule } from 'ngx-bootstrap';
+import { TooltipModule, PaginationModule } from 'ngx-bootstrap';
+import { BooleanAsStringPipe } from './pipes/boolean-to-string.pipe';
+import { ReactiveFormsModule } from '@angular/forms';
+import { BsDatepickerModule } from 'ngx-bootstrap';
+import { NumberPickerModule } from 'ng-number-picker';
 
 @NgModule({
   imports: [
-    SharedRoutingModule,
     CommonModule,
+    SharedRoutingModule,
     ModalModule.forRoot(),
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
+    PaginationModule.forRoot(),
+    BsDatepickerModule.forRoot(),
+    NumberPickerModule,
   ],
   declarations: [
     BadInputErrorsComponent,
@@ -25,6 +32,7 @@ import { TooltipModule } from 'ngx-bootstrap';
     FieldErrorDisplayComponent,
     ListPaginationComponent,
     EnumAsStringPipe,
+    BooleanAsStringPipe,
     ModalConfirmComponent
   ],
   providers:[
@@ -32,16 +40,17 @@ import { TooltipModule } from 'ngx-bootstrap';
     BsModalService
   ],
   exports:[
-    SharedRoutingModule,
-    CommonModule,
-    ModalModule,
     BadInputErrorsComponent,
     BadInputErrorsNoServiceComponent,
     FieldErrorDisplayComponent,
     ListPaginationComponent,
     EnumAsStringPipe,
+    BooleanAsStringPipe,
     ModalConfirmComponent,
-    TooltipModule
+    ReactiveFormsModule,
+    BsDatepickerModule, 
+    NumberPickerModule,
+    CommonModule
   ]
 })
 export class SharedModule {

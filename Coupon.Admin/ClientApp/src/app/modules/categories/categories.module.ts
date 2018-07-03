@@ -13,6 +13,7 @@ import { SharedModule } from "../shared/shared.module";
 import { CategoriesTreeService } from "./services/categories-tree.service";
 import { ContextMenuModule } from "ngx-contextmenu";
 import { CategoryResolver } from "./resolvers/category.resolver";
+import { CategoriesGuardService } from "./services/categories-guard.service";
 
 @NgModule({
   imports: [
@@ -34,7 +35,8 @@ import { CategoryResolver } from "./resolvers/category.resolver";
     CategoriesService,
     CategoriesFormFactory,
     CategoriesTreeService,
-    CategoryResolver
+    CategoryResolver,
+    CategoriesGuardService
   ]
 })
 export class CategoriesModule {}

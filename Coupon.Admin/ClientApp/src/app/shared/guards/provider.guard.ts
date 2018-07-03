@@ -25,9 +25,7 @@ export class ProviderGuard implements CanActivate {
       this.redirectToLogin(redirectUrl);
       return false;
     }
-
-    const user = this.authService.getCurrentUser();
-    const result = user.role >= UserRole.Provider;
+    const result = this.authService.getCurrentUser().role >= UserRole.Provider;
 
     if (result === false) {
       this.redirectToLogin(redirectUrl);      

@@ -88,6 +88,9 @@ export abstract class BaseFormComponent {
     httpError: HttpErrorResponse
   ): void {
     for (const fieldName of Object.keys(httpError.error)) {
+      if (fieldName === "") {
+        continue;
+      }
       const controlName = fieldName[0].toLowerCase() + fieldName.substring(1);
       if (!this.form.contains(controlName)) {
         continue;

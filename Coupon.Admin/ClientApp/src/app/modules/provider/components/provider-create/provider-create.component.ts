@@ -15,12 +15,9 @@ export class ProviderCreateComponent extends BaseFormComponent implements OnInit
   public submitClicked = false;
   public loading = false;
 
-  public title: FormControl;
-  public email: FormControl;
-
   constructor(
     formFactory: ProviderFormFactoryService,
-    private badInputService: BadInputErrorsService,
+    badInputService: BadInputErrorsService,
     private providerService: ProviderService,
     private route: Router,
   ) {
@@ -28,7 +25,7 @@ export class ProviderCreateComponent extends BaseFormComponent implements OnInit
   }
 
   getControlNames(): string[] {
-    return ["email", "title"];
+    return ["email", "title", "login", "password"];
   }
 
   ngOnInit(): void {
@@ -45,6 +42,7 @@ export class ProviderCreateComponent extends BaseFormComponent implements OnInit
 
     this.providerService.create(serialized).subscribe(
       provider => {
+        this.loading = false;
         this.route.navigate(["providers"]);
       },
       error => {

@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { FormControl, FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { BadInputErrorsService } from "../../../../shared/services/bad-input-errors.service";
 import { ProviderFormFactoryService } from "../../services/provider-form-factory.service";
@@ -29,16 +28,16 @@ export class ProviderEditComponent extends BaseFormComponent {
     super(formFactory, badInputService);
     
     this.createForm();
+    this.form.get('password').disable();
     actRoute.data.subscribe(data => {
       const provider = data["provider"]; 
       this.provider = provider;
       this.fillFormControls(provider);
-      console.log(provider)
     });
   }
 
   getControlNames(): string[] {
-    return ["title", "email"];
+    return ["title", "email", "password"];
   }
 
   onDelete(){
@@ -74,8 +73,19 @@ export class ProviderEditComponent extends BaseFormComponent {
     this.provider = provider;
   }
 
+  updatePasChanged(event: any){
+    const disabled = !event.target.checked;
+    if(disabled === true){
+      this.form.get("password").disable();
+    }
+    else{
+      this.form.get("password").enable();
+    }
+  }
+
   onSubmit() {
     this.submitClicked = true;
+    
     if (this.form.invalid) {
       return;
     }

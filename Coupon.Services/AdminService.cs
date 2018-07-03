@@ -2,6 +2,7 @@
 using Coupon.Common;
 using Coupon.Common.Enums;
 using Coupon.Data;
+using Coupon.Data.Interfaces;
 using Coupon.Data.Model;
 using Coupon.Dto;
 using Coupon.Forms.Admin;
@@ -31,20 +32,30 @@ namespace Coupon.Services
             _map = map;
         }
 
-        public async Task<AdminDto> GetForLoginAsync(INormalized<LoginForm> rawForm)
+        //TODO: move to Auth service
+        public async Task<AuthUserDto> GetForLoginAsync(INormalized<LoginForm> rawForm)
         {
             var form = rawForm.Normalize();
 
-            var user = await _db.AdminUsers
+            ILogin user = await _db.AdminUsers
                 .FirstOrDefaultAsync(u => u.Login == form.UserName);
 
             if (user == null)
-                throw new CouponException("Такого пользователя нет, либо пароль неверен.", "");
+            {
+                user = await _db.Providers
+                    .FirstOrDefaultAsync(u => u.Login == form.UserName);
+
+                if (user == null)
+                {
+                    throw new CouponException("Такого пользователя нет, либо пароль неверен.", "");
+                }
+            }
 
             if (user.PasswordHash != Hash.Create(form.Password, user.PasswordSalt))
                 throw new CouponException("Такого пользователя нет, либо пароль неверен.", "");
 
-            return _map.Map<AdminDto>(user);
+            var mapped = _map.Map<AuthUserDto>(user);
+            return mapped;
         }
 
         public async Task<AdminDto> GetAsync(int id)

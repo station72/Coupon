@@ -1,0 +1,124 @@
+<h2>Создание продукта</h2>
+<bad-input-errors></bad-input-errors>
+
+<div class="modal fade" id="cropModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalLabel">Выберите область изображения</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="img-container">
+          <img #cropImg class="cropImg" src="assets/img/nophoto.png">
+        </div>
+      </div>
+      <div class="modal-footer">
+          <div class="btn-group">
+              <button type="button" class="btn btn-primary" title="Move Left">
+                <span (click)="cropper.move(-10, 0)">
+                  <span class="fa fa-arrow-left"></span>
+                </span>
+              </button>
+              <button type="button" class="btn btn-primary" title="Move Right">
+                <span (click)="cropper.move(10, 0)">
+                  <span class="fa fa-arrow-right"></span>
+                </span>
+              </button>
+              <button type="button" class="btn btn-primary" title="Move Up">
+                <span title="" (click)="cropper.move(0, -10)">
+                  <span class="fa fa-arrow-up"></span>
+                </span>
+              </button>
+              <button type="button" class="btn btn-primary" title="Move Down">
+                <span (click)="cropper.move(0, 10)">
+                  <span class="fa fa-arrow-down"></span>
+                </span>
+              </button>
+            </div>
+        <button type="button" class="btn btn-warning" data-dismiss="modal" (click)="cancelCrop()">Отмена</button>
+        <button type="button" class="btn btn-success" (click)="onSaveCropper()" id="crop">Сохранить</button>
+      </div>
+    </div>
+  </div>
+</div>
+<form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate autocomplete="off">
+  <p>Изображение</p>
+  <img id="mainImage" #mainImage src="assets/img/nophoto.png">
+  
+  <div class="form-group">
+    <input #mainImageFileInput type="file" class="btn btn-default" (change)="onFileChanged($event)">
+    <input id="mainImageId" type="hidden" formControlName="mainImageId" class="form-control" [ngClass]="displayFieldCss('mainImageId')"/>
+    <field-error-display [displayError]="isDisplayError('mainImageId', 'required')" [errorMsg]="'Поле обязательно для ввода'"></field-error-display>
+  </div>
+  <div class="form-group">
+    <label for="title">Название</label>
+    <textarea id="title" type="text" formControlName="title" class="form-control" [ngClass]="displayFieldCss('title')"></textarea>
+    <field-error-display [displayError]="isDisplayError('title', 'required')" [errorMsg]="'Поле обязательно для ввода'"></field-error-display>
+    <field-error-display [displayError]="isDisplayError('title', 'maxlength')" [errorMsg]="'Поле слишком длинное'"></field-error-display>
+  </div>
+  <div class="form-group">
+    <label for="fullTitle">Подробное название</label>
+    <textarea id="fullTitle" type="text" formControlName="fullTitle" class="form-control" [ngClass]="displayFieldCss('fullTitle')"></textarea>
+    <field-error-display [displayError]="isDisplayError('fullTitle', 'required')" [errorMsg]="'Поле обязательно для ввода'"></field-error-display>
+    <field-error-display [displayError]="isDisplayError('fullTitle', 'maxlength')" [errorMsg]="'Поле слишком длинное'"></field-error-display>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-4 pl-0">
+        <div class="form-group">
+          <label for="oldPrice">Цена без скидки</label>
+          <ng-number-picker [min]="0" [max]="2147483647" [mouseWheel]="true" (valueChange)="oldPriceChanged($event)" [ngClass]="displayFieldCss('oldPrice')"></ng-number-picker>
+          <input id="oldPrice" type="hidden" #oldPrice formControlName="oldPrice" class="form-control" />
+          <field-error-display [displayError]="isDisplayError('oldPrice', 'required')" [errorMsg]="'Поле обязательно для ввода'"></field-error-display>
+          <field-error-display [displayError]="isDisplayError('oldPrice', 'min')" [errorMsg]="'Поле слишком длинное'"></field-error-display>
+        </div>
+      </div>
+      <div class="col-4">
+        <div class="form-group">
+          <label for="newPrice">Цена cо скидкой</label>
+          <ng-number-picker [min]="0" [max]="2147483647" [mouseWheel]="true" (valueChange)="newPriceChanged($event)" [ngClass]="displayFieldCss('oldPrice')"></ng-number-picker>
+          <input id="newPrice" type="hidden" formControlName="newPrice" #newPrice class="form-control" />
+          <field-error-display [displayError]="isDisplayError('newPrice', 'required')" [errorMsg]="'Поле обязательно для ввода'"></field-error-display>
+          <field-error-display [displayError]="isDisplayError('newPrice', 'min')" [errorMsg]="'Поле слишком длинное'"></field-error-display>
+        </div>
+      </div>
+      <div class="col-4 pr-0">
+        <div class="form-group">
+          <label for="startAvailableCount">Доступно к продаже</label>
+          <ng-number-picker [min]="1" [max]="2147483647" [mouseWheel]="true" (valueChange)="startAvailableCountChanged($event)" [ngClass]="displayFieldCss('startAvailableCount')"></ng-number-picker>
+          <input id="startAvailableCount" type="hidden" formControlName="startAvailableCount" class="form-control" />
+          <field-error-display [displayError]="isDisplayError('startAvailableCount', 'required')" [errorMsg]="'Поле обязательно для ввода'"></field-error-display>
+          <field-error-display [displayError]="isDisplayError('startAvailableCount', 'min')" [errorMsg]="'Значение слишком маленькое'"></field-error-display>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="dateRange">Период действия (гггг-мм--дд)</label>
+    <input bsDaterangepicker (bsValueChange)="onDateRangeChange($event)" [bsConfig]="getDatePickerConfig()" placement="bottom"
+      id="dateRange" type="text" class="form-control" [ngClass]="displayFieldCss('validFrom')" />
+    <field-error-display [displayError]="isDisplayError('validFrom', 'required')" [errorMsg]="'Дата начала действия обязательна для ввода'"></field-error-display>
+    <field-error-display [displayError]="isDisplayError('validUntil', 'required')" [errorMsg]="'Дата окончания действия обязательна для ввода'"></field-error-display>
+  </div>
+
+  <div class="form-group">
+    <label for="conditions">Условия</label>
+    <textarea [froalaEditor] id="conditions" type="text" formControlName="conditions" class="form-control" [ngClass]="displayFieldCss('conditions')"></textarea>
+    <field-error-display [displayError]="isDisplayError('conditions', 'required')" [errorMsg]="'Поле обязательно для ввода'"></field-error-display>
+    <field-error-display [displayError]="isDisplayError('conditions', 'maxlength')" [errorMsg]="'Поле слишком длинное'"></field-error-display>
+  </div>
+
+  <div class="form-group">
+    <label for="description">Описание</label>
+    <textarea [froalaEditor] id="description" type="text" formControlName="description" class="form-control" [ngClass]="displayFieldCss('description')"></textarea>
+    <field-error-display [displayError]="isDisplayError('description', 'required')" [errorMsg]="'Поле обязательно для ввода'"></field-error-display>
+    <field-error-display [displayError]="isDisplayError('fullTitle', 'maxlength')" [errorMsg]="'Поле слишком длинное'"></field-error-display>
+  </div>
+
+  <div class="form-group">
+    <button [disabled]="loading" class="btn btn-primary">Создать</button>
+  </div>
+</form>

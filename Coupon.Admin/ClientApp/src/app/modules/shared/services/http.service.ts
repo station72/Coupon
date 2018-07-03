@@ -33,6 +33,13 @@ export class HttpService {
     })
   }
 
+  public postFormData<T>(uri, data: FormData): Observable<HttpResponse<T>>{
+    return this.http.post<T>(this.getUrl(uri), data, {
+      observe: this.observe,
+      withCredentials: this.withCredentials
+    })
+  }
+
   public post<T>(uri, data: any): Observable<HttpResponse<T>>{
     if(isDevMode()){
       console.log("POST uri = " + uri, " data = " + data);

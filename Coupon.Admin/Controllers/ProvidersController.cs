@@ -3,7 +3,6 @@ using Coupon.Forms.Common;
 using Coupon.Forms.Provider;
 using Coupon.Services;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -26,8 +25,8 @@ namespace Coupon.Admin.Controllers
             return CreatedAtRoute(nameof(GetProvider), new { id = result.Id }, result);
         }
 
-        [HttpGet("{id:guid}", Name = nameof(GetProvider))]
-        public async Task<IActionResult> GetProvider(Guid id)
+        [HttpGet("{id:int}", Name = nameof(GetProvider))]
+        public async Task<IActionResult> GetProvider(int id)
         {
             var result = await _providersService.GetAsync(id);
             return Ok(result);
@@ -47,24 +46,31 @@ namespace Coupon.Admin.Controllers
             return Ok(listResult);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody]ProviderUpdateForm form)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody]ProviderUpdateForm form)
         {
             var result = await _providersService.UpdateAsync(id, form);
             return Ok(result);
         }
 
-        [HttpPost("{id:guid}/block")]
-        public async Task<IActionResult> Block(Guid id)
+        [HttpPost("{id}/block")]
+        public async Task<IActionResult> Block(int id)
         {
             await _providersService.SetBlockAsync(id, true);
             return Ok();
         }
 
-        [HttpPost("{id:guid}/unblock")]
-        public async Task<IActionResult> Unblock(Guid id)
+        [HttpPost("{id}/unblock")]
+        public async Task<IActionResult> Unblock(int id)
         {
             await _providersService.SetBlockAsync(id, false);
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _providersService.DeleteAsync(id);
             return Ok();
         }
     }

@@ -8,7 +8,7 @@ namespace Coupon.Services
 {
     public interface IProductsService
     {
-        Task<ProductDto> CreateAsync(ProductCreateForm form);
+        Task<ProductDto> CreateAsProviderAsync(int currentUser, int providerId, ProductCreateForm form);
 
         Task<ProductDto> GetAsync(int id);
 
@@ -17,5 +17,7 @@ namespace Coupon.Services
         Task DeleteAsync(int id);
 
         Task<IEnumerable<ProductDto>> GetListAsync(PagingForm pagingForm);
+
+        Task<int> GetTotalCount(PagingForm form);
     }
 }

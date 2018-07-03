@@ -12,6 +12,7 @@
       <tr>
         <th>Название</th>
         <th>Email</th>
+        <th>Заблокирован</th>
         <th></th>
       </tr>
     </thead>
@@ -19,6 +20,7 @@
       <tr *ngFor="let provider of providers">
         <td>{{provider.title}}</td>
         <td>{{provider.email}}</td>
+        <td>{{provider.isBlocked | booleanAsString}}</td>
         <td>
           <button (click)="onEdit(provider.id)">Редактировать</button>
         </td>

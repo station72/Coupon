@@ -1,26 +1,16 @@
 <h1>Вход в систему</h1>
 <bad-input-errors></bad-input-errors>
-<form [formGroup]="loginForm" novalidate (submit)="onSubmit($event)" autocomplete="off">
+<form [formGroup]="form" novalidate (submit)="onSubmit($event)" autocomplete="off">
   <div class="form-group">
     <label for="username">Пользователь</label>
-    <input formControlName="username" type="text" id="username" class="form-control" [ngClass]="{ 
-      'is-invalid': username.invalid && (submitted || username.touched),
-      'is-valid': username.valid && (submitted || username.touched)
-  }">
-  </div>
-  <div *ngIf="(submitted || username.touched) && username.invalid" class="alert alert-danger">
-    <div *ngIf="username.errors.required">Имя пользователя обязательно для ввода</div>
+    <input formControlName="username" type="text" id="username" class="form-control" [ngClass]="displayFieldCss('username')">
+    <field-error-display [displayError]="isDisplayError('username', 'required')" [errorMsg]="'Имя пользователя обязательно для ввода'"></field-error-display>
   </div>
   <div class="form-group">
     <label for="password">Пароль</label>
-    <input type="password" formControlName="password" id="password" class="form-control" [ngClass]="{ 
-      'is-invalid': password.invalid && (submitted || password.touched),
-      'is-valid': password.valid && (submitted || password.touched)
-  }">
-  </div>
-  <div *ngIf="(submitted || password.touched) && password.invalid" class="alert alert-danger">
-    <div *ngIf="password.errors.required">Введите пароль</div>
-    <div *ngIf="password.errors.minlength">Минимальная длина пароля {{password.errors.minlength.requiredLength}}</div>
+    <input type="password" formControlName="password" id="password" class="form-control" [ngClass]="displayFieldCss('password')">
+    <field-error-display [displayError]="isDisplayError('password', 'required')" [errorMsg]="'Введите пароль'"></field-error-display>
+    <field-error-display [displayError]="isDisplayError('password', 'minlength')" [errorMsg]="'Пароль слишком короткий'"></field-error-display>
   </div>
   <div class="form-group">
     <input class="btn btn-primary" type="submit" value="Войти">

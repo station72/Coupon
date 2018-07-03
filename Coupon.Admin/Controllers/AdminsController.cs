@@ -28,7 +28,7 @@ namespace Coupon.Admin.Controllers
             return CreatedAtAction(nameof(Get), new { id = created.Id }, created);
         }
 
-        [HttpGet("{id:int}", Name = nameof(Get))]
+        [HttpGet("{id}", Name = nameof(Get))]
         public async Task<IActionResult> Get(int id)
         {
             var admin = await _adminService.GetAsync(id);
@@ -50,14 +50,14 @@ namespace Coupon.Admin.Controllers
             return Ok(result);
         }
 
-        [HttpPut("{id:int}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody]AdminUpdateForm form)
         {
             var updated = await _adminService.UpdateAsync(id, form);
             return Ok(updated);
         }
 
-        [HttpDelete("{id:int}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             await _adminService.DeleteAsync(id);

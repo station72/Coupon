@@ -5,5 +5,6 @@ export interface AdminDto{
     email: string,
     name: string,
     login: string,
-    role: UserRole
+    role: UserRole,
+    isBlocked: boolean
 }

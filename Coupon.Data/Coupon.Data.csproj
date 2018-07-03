@@ -9,6 +9,11 @@
     <Compile Remove="Migrations\20180615131011_AddChildrenToCategories.cs" />
     <Compile Remove="Migrations\20180615131159_AddChildrenToCategories.cs" />
     <Compile Remove="Migrations\20180615131339_AddChildrenToCategories.cs" />
+    <Compile Remove="Migrations\20180624072145_AddLoginToProviders.cs" />
+    <Compile Remove="Migrations\20180624072600_AddLoginToProviders.cs" />
+    <Compile Remove="Migrations\20180624073454_AddDeleteProvidersTable.cs" />
+    <Compile Remove="Migrations\20180626143412_ChangeProviderIdInProducts.cs" />
+    <Compile Remove="Migrations\20180626143749_ChangeProviderIdInProducts.cs" />
   </ItemGroup>
 
   <ItemGroup>

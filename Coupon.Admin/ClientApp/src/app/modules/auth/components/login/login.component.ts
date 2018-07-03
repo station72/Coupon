@@ -1,10 +1,11 @@
 import { Component, OnInit } from "@angular/core";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormControl } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { LoginFormFactoryService } from "src/app/modules/auth/services/login-form-factory.service";
 import { UserDto } from "src/app/shared/data/user/user.dto";
 import { AuthService } from "src/app/shared/services/auth.service";
-import { Router, ActivatedRoute } from "@angular/router";
 import { NotificationService } from "src/app/shared/services/notifications.service";
-import { HttpErrorResponse } from "@angular/common/http";
+import { BaseFormComponent } from "../../../../shared/components/base-form.component";
 import { BadInputErrorsService } from "../../../../shared/services/bad-input-errors.service";
 
 @Component({
@@ -12,11 +13,10 @@ import { BadInputErrorsService } from "../../../../shared/services/bad-input-err
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.css"]
 })
-export class LoginComponent implements OnInit {
-  public loginForm: FormGroup;
+export class LoginComponent extends BaseFormComponent implements OnInit {
   public username: FormControl;
   public password: FormControl;
-  public submitted: boolean;
+  public submitClicked: boolean;
   private returnUrl: string;
 
   constructor(
@@ -24,48 +24,36 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private activatedRout: ActivatedRoute,
     private notificationService: NotificationService,
-    private badInputService: BadInputErrorsService
-  ) {}
+    badInputService: BadInputErrorsService,
+    formFactory: LoginFormFactoryService
+  ) {
+    super(formFactory, badInputService);
+    this.createForm();
+  }
+
+  getControlNames(): string[] {
+    return ["username", "password"];
+  }
 
   ngOnInit() {
     this.activatedRout.queryParams.subscribe(params => {
       this.returnUrl = params["returnUrl"];
     });
-
-    this.formInit();
-  }
-
-  private formInit() {
-    this.username = new FormControl("", 
-      [Validators.required]
-    );
-    this.password = new FormControl("", [
-      Validators.required,
-      Validators.minLength(6)
-    ]);
-
-    this.loginForm = new FormGroup({
-      username: this.username,
-      password: this.password
-    });
   }
 
   onSubmit($event) {
-    $event.preventDefault();
-    this.submitted = true;
-    if (this.loginForm.invalid) {
+    this.submitClicked = true;
+
+    if (this.form.invalid) {
       return false;
     }
 
     this.authService
-      .login(this.loginForm.getRawValue())
-      .subscribe(this.success.bind(this), (error=>{
-        console.log(error);
-        const httpError = error as HttpErrorResponse;
-        if(httpError.status === 400){
-          this.badInputService.showHttpError(httpError);
-        } 
-      }));
+      .login(this.form.getRawValue())
+      .subscribe(
+        this.success.bind(this), 
+        error => this.showServerErrors(error)
+      );
 
     return false;
   }

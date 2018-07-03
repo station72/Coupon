@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
 using Coupon.Common;
+using Coupon.Common.Enums;
 using Coupon.DAL;
+using Coupon.Data;
 using Coupon.Data.Model;
 using Coupon.Dto;
 using Coupon.Forms.Common;
 using Coupon.Forms.Product;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,27 +19,47 @@ namespace Coupon.Services
     {
         private readonly IProductsRepository _productsRepository;
         private readonly IMapper _mapper;
+        private readonly IImagesService _imagesService;
+        private readonly CouponDbContext _db;
 
         public ProductsService(
             IProductsRepository productsRepository,
-            IMapper mapper)
+            IImagesService imagesService,
+            IMapper mapper,
+            CouponDbContext db
+            )
         {
             _productsRepository = productsRepository;
+            _imagesService = imagesService;
             _mapper = mapper;
+            _db = db;
         }
 
-        public async Task<ProductDto> CreateAsync(ProductCreateForm form)
+        public async Task<ProductDto> CreateAsProviderAsync(int userId, int providerId, ProductCreateForm form)
         {
+            var image = await _imagesService.SaveImageAsync(form.MainImage);
             var productForCreation = new Products
             {
-                Title = form.Title
+                Title = form.Title,
+                Conditions = form.Conditions,
+                FullTitle = form.FullTitle,
+                Description = form.Description,
+                ValidFrom = form.ValidFrom.Value,
+                ValidUntil = form.ValidUntil.Value,
+                State = ProductState.New,
+                MainImageId = image.Id,
+                OldPrice = form.OldPrice.Value,
+                NewPrice = form.NewPrice.Value,
+                OnSale = false,
+                StartAvailableCount = form.StartAvailableCount,
+                ProviderId = providerId
             };
 
-            var result = await _productsRepository.Add(productForCreation);
-            //await _productsRepository.Save();
+            var newProduct = _db.Products.Add(productForCreation);
+            await _db.SaveChangesAsync();
 
-            var mapperdProduct = _mapper.Map<ProductDto>(result);
-            return mapperdProduct;
+            var mappedProduct = _mapper.Map<ProductDto>(newProduct.Entity);
+            return mappedProduct;
         }
 
         public async Task DeleteAsync(int id)
@@ -62,6 +86,13 @@ namespace Coupon.Services
         {
             var products = await _productsRepository.GetListAsync(pagingForm);
             return products.Select(_mapper.Map<ProductDto>);
+        }
+
+        public Task<int> GetTotalCount(PagingForm form)
+        {
+            return _db.Products
+                .Where(u => !u.IsDeleted)
+                .CountAsync();
         }
 
         public async Task<ProductDto> UpdateAsync(int id, ProductUpdateForm form)

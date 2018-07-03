@@ -23,11 +23,8 @@ export class ModalConfirmComponent implements AfterViewInit {
   public modalRef: BsModalRef;
 
   @Input() private showSubject: Subject<any>;
-
   @Input() public confirmText: string = "Вы уверены?";
-
   @Output() private confirm: EventEmitter<any> = new EventEmitter();
-
   @ViewChild("templ") private templ: TemplateRef<any>;
 
   constructor(private modalService: BsModalService) {}

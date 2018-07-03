@@ -16,7 +16,7 @@ import { AdminFormFactoryService } from './services/admin-form-factory.service';
 @NgModule({
   imports: [
     AdminsRoutingModule,
-    BrowserModule,
+    // BrowserModule,
     ReactiveFormsModule, 
     SharedModule
   ],

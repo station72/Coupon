@@ -5,6 +5,7 @@ import { CategoriesTreeComponent } from "./components/categories-tree/categories
 import { CategoriesUpdateComponent } from "./components/categories-update/categories-update.component";
 import { CategoriesRootComponent } from "./components/categories-root/categories-root.component";
 import { CategoryResolver } from "./resolvers/category.resolver";
+import { CategoriesGuardService } from "./services/categories-guard.service";
 
 const routes: Routes = [
   {
@@ -15,6 +16,8 @@ const routes: Routes = [
   {
     path: "root",
     component: CategoriesRootComponent,
+    canActivate: [CategoriesGuardService],
+    canActivateChild: [CategoriesGuardService],
     children: [
       {
         path: "",

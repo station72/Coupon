@@ -1,25 +1,16 @@
 ﻿using AutoMapper;
+using Coupon.Admin.Extensions;
+using Coupon.Common.Constants;
 using Coupon.Common.Options;
 using Coupon.Data;
 using Coupon.Services;
 using Coupon.Web.Utils.Attributes;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
-using Microsoft.AspNetCore.Authorization;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization.Infrastructure;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Net;
-using Microsoft.AspNetCore.SpaServices.AngularCli;
-using Coupon.Data.Utils;
 
 namespace Coupon.Admin
 {
@@ -35,39 +26,10 @@ namespace Coupon.Admin
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddPolicy("CorsPolicy",
-                    builder => builder
-                    .SetIsOriginAllowed(origin =>
-                    {
-                        return origin == "http://localhost:4200";
-                    })
-                    .AllowAnyHeader()
-                    .AllowAnyMethod()
-                    .AllowCredentials());
-            });
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, o =>
-            {
-                o.AccessDeniedPath = new PathString("/api/auth/accessdenied");
-                o.Events.OnRedirectToLogin = context =>
-                {
-                    context.Response.Headers["Location"] = (new PathString("/api/auth/login").ToString());
-                    context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
-                    return Task.CompletedTask;
-                };
-                o.Cookie = new CookieBuilder()
-                {
-                    Name = ".auth",
-                    HttpOnly = true,
-                    //Expiration = TimeSpan.FromSeconds(20)  //it does not affect
-                };
-                o.LoginPath = new PathString("/api/auth/login");
-            });
-
-            AddAuthorization(services);
+            services.AddCouponCors();
+            services.AddCouponAuthentication();
+            services.AddCouponAuthorization();
+            services.AddCouponServices();
 
             services.AddLogging();
             services.AddMvc(opt =>
@@ -87,19 +49,12 @@ namespace Coupon.Admin
 
             var connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<CouponDbContext>(options => options.UseSqlServer(connection));
-
-            services.AddScoped<IProvidersService, ProvidersService>();
-            services.AddScoped<IAdminService, AdminService>();
-            services.AddScoped<ICategoriesService, CategoriesService>();
-            services.AddSingleton<IRawSqlQuery, RawSqlQuery>();
-
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseCors("CorsPolicy");
+            app.UseCors(CorsConstants.MainPolicy);
             app.UseAuthentication();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -143,55 +98,5 @@ namespace Coupon.Admin
             */
             
         }
-
-        private IServiceCollection AddAuthorization(IServiceCollection services)
-        {
-            var supAdmReq = new AssertionRequirement(context =>
-            {
-                var claim = context.User?.Claims
-                .FirstOrDefault(u => u.Type == ClaimsIdentity.DefaultRoleClaimType);
-
-                if (claim == null)
-                    return false;
-
-                return claim.Value == "SuperAdmin";
-            });
-
-
-            var admOrHighReq = new AssertionRequirement(context =>
-            {
-                var claim = context.User?.Claims
-                .FirstOrDefault(u => u.Type == ClaimsIdentity.DefaultRoleClaimType);
-
-                if (claim == null)
-                    return false;
-
-                return claim.Value == "SuperAdmin" || claim.Value == "Admin";
-            });
-
-            var superAdminPolicy = new AuthorizationPolicy(
-                    new List<IAuthorizationRequirement> { supAdmReq },
-                    new string[] { CookieAuthenticationDefaults.AuthenticationScheme });
-
-
-            services.AddAuthorization(conf =>
-            {
-                conf.AddPolicy("SuperAdmin", superAdminPolicy);
-
-                conf.AddPolicy("AdminOrHigher", new AuthorizationPolicy(
-                    new List<IAuthorizationRequirement> { admOrHighReq },
-                    new string[] { CookieAuthenticationDefaults.AuthenticationScheme }));
-
-                conf.DefaultPolicy = superAdminPolicy;
-            });
-
-            return services;
-        }
     }
-
-    public class ConnectionStrings
-    {
-
-    }
-
 }

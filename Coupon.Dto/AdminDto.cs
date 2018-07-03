@@ -13,5 +13,7 @@ namespace Coupon.Dto
         public AdminRole Role { get; set; }
 
         public string Email { get; set; }
+
+        public bool IsBlocked { get; set; }
     }
 }

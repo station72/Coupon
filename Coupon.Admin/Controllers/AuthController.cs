@@ -1,6 +1,4 @@
-﻿using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using Coupon.Common.Constants;
 using Coupon.Forms.Admin;
 using Coupon.Forms.Auth;
 using Coupon.Services;
@@ -9,10 +7,13 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace Coupon.Admin.Controllers
 {
-    [EnableCors("CorsPolicy", PolicyName = "CorsPolicy")]
+    [EnableCors(CorsConstants.MainPolicy)]
     [Route("/api/auth")]
     public class AuthController : Controller
     {
@@ -43,9 +44,10 @@ namespace Coupon.Admin.Controllers
 
             var claims = new Claim[]
             {
-                new Claim("id", userDto.Id.ToString()),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, "SuperAdmin"),
-                new Claim(ClaimsIdentity.DefaultNameClaimType, form.UserName)
+                new Claim(AuthConstants.ClaimNames.Id, userDto.Id.ToString()),
+                new Claim(AuthConstants.ClaimNames.Token, userDto.Token.ToString()),
+                new Claim(AuthConstants.ClaimNames.ProviderId, userDto.ProviderId ==  0 ? "": userDto.ProviderId.ToString()),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, userDto.Role.ToString()),
             };
 
             var claimsIdentity = new ClaimsIdentity(claims);
@@ -59,7 +61,7 @@ namespace Coupon.Admin.Controllers
                     ExpiresUtc = DateTime.UtcNow.AddDays(1)
                 });
 
-            return Json(userDto);
+            return Ok(userDto);
         }
 
         [HttpPost("/logout")]

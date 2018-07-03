@@ -13,6 +13,7 @@ import { SharedModule } from './modules/shared/shared.module';
 import { NotificationService } from './shared/services/notifications.service';
 import { AdminsModule } from './modules/admins/admins.module';
 import { ContextMenuModule } from 'ngx-contextmenu';
+import { ContentService } from './shared/services/content.service';
 
 @NgModule({
   declarations: [
@@ -36,9 +37,10 @@ import { ContextMenuModule } from 'ngx-contextmenu';
     FormsModule,
     ReactiveFormsModule,
   ],
-  exports:[
+  providers: [
+    NotificationService,
+    ContentService
   ],
-  providers: [NotificationService],
   bootstrap: [AppComponent]
 })
 export class AppModule {

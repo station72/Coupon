@@ -16,5 +16,9 @@ namespace Coupon.Data
         public DbSet<Products> Products { get; set; }
 
         public DbSet<Providers> Providers { get; set; }
+
+        public DbSet<Comments> Comments { get; set; }
+
+        public DbSet<Images> Images { get; set; }
     }
 }

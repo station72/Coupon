@@ -10,6 +10,7 @@ using Coupon.Dto;
 using Coupon.Forms.Common;
 using Coupon.Forms.Common.Interfaces;
 using Coupon.Forms.Provider;
+using Coupon.Utils.Security;
 using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Services
@@ -32,21 +33,33 @@ namespace Coupon.Services
             var form = rawForm.Normalize();
 
             var emailExists = await _db.Providers
-                .AnyAsync(u => u.Email == form.Email);
+                .AnyAsync(u => u.Email == form.Email && !u.IsDeleted);
 
             if (emailExists)
                 throw new CouponException("Поставщик с таким email уже есть!!!", nameof(form.Email));
 
             var titleExists = await _db.Providers
-                .AnyAsync(u => u.Title == form.Title);
+                .AnyAsync(u => u.Title == form.Title && !u.IsDeleted);
 
             if (titleExists)
                 throw new CouponException("Поставщик с таким именем уже есть!!!", nameof(form.Title));
 
+            var loginExists = await _db.Providers
+                .AnyAsync(u => u.Login == form.Login && !u.IsDeleted);
+
+            if (loginExists)
+                throw new CouponException("Поставщик с таким логином уже есть!!!", nameof(form.Login));
+
+            var salt = Salt.Create();
+            var password = Hash.Create(form.Password, salt);
             var created = _db.Providers.Add(new Providers
             {
                 Title = form.Title,
-                Email = form.Email
+                Email = form.Email,
+                Login = form.Login,
+                PasswordSalt = salt,
+                PasswordHash = password,
+                Token = Guid.NewGuid()
             });
 
             await _db.SaveChangesAsync();
@@ -54,7 +67,19 @@ namespace Coupon.Services
             return _mapper.Map<ProviderDto>(created.Entity);
         }
 
-        public async Task<ProviderDto> GetAsync(Guid id)
+        public async Task DeleteAsync(int id)
+        {
+            var provider = await _db.Providers
+                .FirstOrDefaultAsync(u => u.Id == id);
+
+            if (provider == null)
+                return;
+
+            provider.IsDeleted = true;
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task<ProviderDto> GetAsync(int id)
         {
             var provider = await _db.Providers
                 .AsNoTracking()
@@ -78,7 +103,7 @@ namespace Coupon.Services
             return list.Select(_mapper.Map<ProviderDto>);
         }
 
-        public async Task SetBlockAsync(Guid id, bool isBlocked)
+        public async Task SetBlockAsync(int id, bool isBlocked)
         {
             var provider = await _db.Providers
                 .FirstOrDefaultAsync(u => u.Id == id && !u.IsDeleted);
@@ -99,7 +124,7 @@ namespace Coupon.Services
             return count;
         }
 
-        public async Task<ProviderDto> UpdateAsync(Guid id, INormalized<ProviderUpdateForm> rawForm)
+        public async Task<ProviderDto> UpdateAsync(int id, INormalized<ProviderUpdateForm> rawForm)
         {
             var form = rawForm.Normalize();
 
@@ -124,6 +149,14 @@ namespace Coupon.Services
 
             provider.Email = form.Email;
             provider.Title = form.Title;
+
+            if (!string.IsNullOrWhiteSpace(form.Password))
+            {
+                var salt = Salt.Create();
+                var hashedPas = Hash.Create(form.Password, salt);
+                provider.PasswordSalt = salt;
+                provider.PasswordHash = hashedPas;
+            }
 
             await _db.SaveChangesAsync();
 

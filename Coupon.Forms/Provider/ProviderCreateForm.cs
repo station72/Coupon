@@ -4,22 +4,27 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Coupon.Forms.Provider
 {
-    public class ProviderCreateForm : INormalized<ProviderCreateForm>
+    public class ProviderCreateForm : ProviderBaseForm, INormalized<ProviderCreateForm>
     {
+        //TODO: add on the clien side no-whitespace check
         [Required]
-        [MaxLength(ProviderConstants.TitleMaxLength)]
-        public string Title { get; set; }
+        [MinLength(ProviderConstants.LoginMinLength)]
+        [MaxLength(ProviderConstants.LoginMaxLength)]
+        public string Login { get; set; }
 
-        //TODO: пропускает кириллицу
-        [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        [Required]
+        [MinLength(ProviderConstants.PasswordMinLength)]
+        [MaxLength(ProviderConstants.PasswordMaxLength)]
+        public string Password { get; set; }
 
         public ProviderCreateForm Normalize()
         {
             return new ProviderCreateForm
             {
                 Title = Title.Trim(),
-                Email = Email.Trim().ToLower()
+                Email = Email.Trim().ToLower(),
+                Login = Login,
+                Password = Password
             };
         }
     }
